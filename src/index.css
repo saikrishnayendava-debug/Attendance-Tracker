@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@import 'flowbite';
+/* ----------------------------- */
+/* Body */
+html, body, #root {
+  height: 100%;
+}
+body {
+  font-family: "Sora", sans-serif;
+  font-size: 16px;
+}
+
+/* ----------------------------- */
+/* Calendar container */
+.react-calendar {
+  width: fit-content;
+  max-width: 700px;          /* wider for bigger screens */
+  margin: 0 auto;
+  background: #c90c0c;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* box-sizing: border-box; */
+}
+
+/* ----------------------------- */
+/* Navigation buttons (prev/next month) */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: center;  /* center buttons */              /* space between buttons */
+  /* margin-bottom: 0.5rem; */
+}
+
+.react-calendar__navigation button {
+  flex: none;               /* don’t stretch */
+            /* minimum size */
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  /* background: #f1f5f9; */
+  color: #1e293b;
+  /* border-radius: 0.25rem; */
+  cursor: pointer;
+  border: none;
+  /* transition: all 0.2s; */
+}
+
+
+
+/* ----------------------------- */
+/* Weekdays */
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  font-weight: 600;
+  color: #151515;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+/* ----------------------------- */
+/* Calendar tiles */
+.react-calendar__tile {
+  width: fit-content;
+  aspect-ratio: 1 / 1;         /* square tiles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  border-radius: 50%;          /* circular tiles */
+}
+
+.react-calendar__tile:hover {
+  /* background-color: #e2e8f0; */
+  transform: scale(1.05);
+}
+
+/* Selected leave dates */
+.react-calendar__tile.bg-red-500 {
+  background-color: #ff9d00 !important;
+  color: #090909 !important;
+  box-shadow: 0 0 0 3px #fcd34d inset;
+}
+
+/* Selected holiday dates */
+.react-calendar__tile.bg-green-500 {
+  background-color: #ff9d00 !important;
+  color: #090909 !important;
+  box-shadow: 0 0 0 3px #fcd34d inset;
+}
+
+/* Today highlight */
+.react-calendar__tile--now {
+  background: #e0f2fe;
+  font-weight: bold;
+  /* border-radius: 50%; */
+}
+
+/* Hover on selected dates */
+.react-calendar__tile.bg-red-500:hover,
+.react-calendar__tile.bg-green-500:hover {
+  /* opacity: 0.85; */
+  transform: scale(1.1);
+}
+
+/* ----------------------------- */
+/* Responsive max width */
+@media (min-width: 768px) {
+  .react-calendar {
+    max-width: 700px;
+  }
+}
+.react-calendar__navigation button:first-child,
+.react-calendar__navigation button:last-child {
+  display: none; /* hides prev/next year buttons */
+}
+
+.react-calendar__navigation button:nth-child(2),
+.react-calendar__navigation button:nth-child(3) {
+  flex: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  /* background: #f1f5f9; */
+  color: #1e293b;
+  /* border-radius: 0.25rem; */
+  cursor: pointer;
+  border: none;
+  margin: 0 0.25rem;
+}
