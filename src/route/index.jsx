@@ -11,7 +11,7 @@ import PrivacyPolicy from "../Components/PrivacyPolicy";
 import TermandConditions from "../Components/TermandConditions";
 import Aboutus from "../Components/Aboutus";
 import ContactUs from "../Components/ContactUs";
-import WaterSortPuzzle from "../Components/WaterSortPuzzle ";
+import WaterSortPuzzle from "../Components/WaterSortPuzzle";
 
 
 const router = createBrowserRouter([
