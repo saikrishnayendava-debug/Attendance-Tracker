@@ -277,7 +277,7 @@ const Home = () => {
       setMiniLoading(true);
       const frnd_num = frnd_data.frnd_redgNo;
       const frnd_pass = frnd_data.frnd_password;
-
+      if (!frnd_num || !frnd_pass) return;
       localStorage.setItem("frnd_redgNo", frnd_num);
       localStorage.setItem("frnd_password", frnd_pass);
 
