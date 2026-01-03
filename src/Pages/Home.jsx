@@ -380,10 +380,10 @@ const Home = () => {
 
       <div className=' mt-5 mx-1 flex items-center justify-around'>
 
-        <div className=' bg-emerald-200 pt-2  text-slate-900 h-40 w-40 rounded-3xl py-1 font-bold text-sm '>
+        <div className=' bg-emerald-200 pt-2   h-40 w-40 rounded-3xl py-1 font-bold text-sm '>
           {
             totalPercentage >= 75 ? (
-              <div className='flex flex-col font-extrabold items-center justify-center '>
+              <div className='flex flex-col text-black font-extrabold items-center justify-center '>
                 <div>Periods can skip</div>
                 <div className="flex flex-row w-full items-center justify-center">
                   <div className='text-6xl mt-6'>
@@ -392,11 +392,15 @@ const Home = () => {
                   {/* <IoMdBatteryFull size={25} className='text-green-500' /> */}
                   <ImPower />
                 </div>
-                <div className='mt-4'>{Math.floor(hoursCanSkip / 7)} days, {hoursCanSkip % 7} periods</div>
+                <div className='mt-4 flex gap-1'>
+                  <p className='bg-lime-500 rounded-md p-1'>{Math.floor(hoursCanSkip / 7)} days</p>
+                  <p className='bg-black text-lime-500 rounded-md p-1' rounded p-1> {hoursCanSkip % 7} periods</p>
+
+                </div>
 
               </div>
             ) : (
-              <div className='flex flex-col font-bold items-center justify-center'>
+              <div className='flex flex-col text-black font-bold items-center justify-center'>
                 <div>Periods to attend</div>
                 <div className="flex flex-row w-full items-center justify-center">
 
@@ -404,7 +408,10 @@ const Home = () => {
                   {/* <MdBatteryAlert size={25} className='text-red-500' /> */}
 
                 </div>
-                <div className='mt-4'>{Math.floor(hoursNeeded / 7)} days, {hoursNeeded % 7} periods</div>
+                <div className='mt-4 flex gap-1'>
+                  <p className='bg-red-500 rounded-md p-1'>{Math.floor(hoursNeeded / 7)} days</p>
+                  <p className='bg-black text-red-500 rounded-md p-1'>{hoursNeeded % 7} periods</p>
+                </div>
               </div>
             )
           }
@@ -708,7 +715,7 @@ const Home = () => {
 
 
 
-      
+
 
     </section>
 

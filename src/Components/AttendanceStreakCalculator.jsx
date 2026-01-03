@@ -68,7 +68,7 @@ const AttendanceStreakCalculator = ({ response }) => {
         <p className="text-center">Present Streak🔥</p>
         <div className="font-extrabold flex gap-1 items-center"><span className="bg-lime-500 p-1 rounded-md font-extrabold">{stats.max_p_streak_count}periods</span> <span className="bg-black text-lime-500 p-1 rounded-md font-extrabold">{Math.floor(stats.max_p_streak_count / 7)} days</span></div>
       </div>
-      <div className="rounded-lg font-bold bg-orange-400 text-black flex flex-col items-center justify-center px-3 py-2">
+      <div className="rounded-lg font-bold bg-orange-300 text-black flex flex-col items-center justify-center px-3 py-2">
         <p className="text-center">Absent Streak🔥 </p>
         <div className="font-extrabold flex gap-1 items-center"><span className="bg-red-500 p-1 rounded-md font-extrabold">{stats.max_a_streak_count}periods</span> <span className="bg-black text-red-500 p-1 rounded-md font-extrabold">{Math.floor(stats.max_a_streak_count / 7)} days</span></div>
       </div>
