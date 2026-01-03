@@ -55,7 +55,9 @@ function attendenceCalculator(
       day: dayString,
       date: day,
       attendence: attendencePerform(present, held),
-      absent: absent
+      absent: absent,
+      held : held,
+      present: present
     });
 
     current.setUTCDate(current.getUTCDate() + 1);

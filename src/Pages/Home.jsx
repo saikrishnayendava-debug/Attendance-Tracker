@@ -648,12 +648,12 @@ const Home = () => {
                     </div>
 
                   ) : (
-                    <div className={`w-90 ${index === 0 && "mb-8"}  ${(item.absent) ? "text-red-500  border border-red-500" : "text-black border border-[#87ecbb] bg-lime-300 "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
-                      <p className={`${item.absent ? "bg-red-500 text-black" : "bg-lime-500 text-black"} rounded-md p-1`}>{item.day} </p>
+                    <div className={`w-90 ${index === 0 && "mb-8"}  ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
+                      <p>{item.day} </p>
 
 
-                      <p className={`font-extrabold bg-black ${item.absent ? "text-red-500" : "text-lime-500"} p-1 rounded-md`}>{item.attendence} %</p>
-                      <p>{item.absent ? "Absent" : "Present"}</p>
+                      <p className='font-extrabold'>{item.attendence} %</p>
+                      <p>{item.present} / {item.held}</p>
                     </div>
                   )
                   }
