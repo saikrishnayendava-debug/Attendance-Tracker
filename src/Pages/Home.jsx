@@ -422,7 +422,7 @@ const Home = () => {
 
 
         <div className='h-40 rounded-3xl border border-[#222528] shadow shadow-slate-800 py-1 font-extrabold text-sm w-40 flex flex-col items-center justify-center text-[#e6fdff]'>
-          <div className='bg-yellow-400 text-black rounded-2xl px-1'>Present attendance</div>
+          <div className=' text-green-500 rounded-2xl px-1'>Present attendance</div>
           <div>
             {data.total_percentage
               ? <ChartComponent progress={data.total_percentage} />
