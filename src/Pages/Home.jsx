@@ -624,13 +624,34 @@ const Home = () => {
         <div className='my-5'>
           <h1 className='text-center text-2xl font-bold text-slate-200'>Attendance as per data</h1>
         </div>
+        
         <div className='flex flex-col items-center justify-center gap-2'>
           {
 
             attendanceArray?.map((item, index) => {
               return (
                 <div key={index} >
+                  {
+                    index === 0 && (
+                      <div className={`  ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200  "}  rounded font-bold flex gap-5 text-2xs `}>
+                      <p>Date </p>
 
+
+                      <p className='font-extrabold'>Percentage</p>
+                      <p>Attendance</p>
+                      <div className='flex items-center gap-4'>
+                        <div className='flex gap-0.5'>
+                        <p className='w-4 h-4 rounded bg-green-400'></p>
+                        <p>-skip</p>
+                        </div>
+                        <div className='flex gap-0.5'>
+                        <p className='w-4 h-4 rounded bg-red-400'></p>
+                        <p>-hours needed</p>
+                        </div>
+                      </div>
+                    </div>
+                    )
+                  }
                   {(index === 0 && selectedPeriods.length > 0) ? (
                     <div className={`w-90 mb-8  ${(tempCnt === 7) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
                       <p>{item.day}</p>
@@ -654,6 +675,7 @@ const Home = () => {
 
                       <p className='font-extrabold'>{item.attendence} %</p>
                       <p>{item.present} / {item.held}</p>
+                      <p className={`${item.attendence >= 75 ? "bg-green-400 " : "bg-red-400 "} text-black font-extrabold text-sm px-2 rounded`}>{item.attendence >= 75 ? item.hoursCanSkip : item.additionalHoursNeeded}</p>
                     </div>
                   )
                   }
