@@ -17,7 +17,7 @@ const WaterSortPuzzle = () => {
       '#99ff00', '#009100', '#00a2fa', '#787fb3'
     ];
     
-    for (let level = 1; level <= 50; level++) {
+    for (let level = 1; level <= 100; level++) {
       let numColors, numTubes;
       
       if (level <= 3) {
@@ -102,7 +102,7 @@ const WaterSortPuzzle = () => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const level = parseInt(saved, 10);
-        if (level >= 1 && level <= 50) {
+        if (level >= 1 && level <= 100) {
           return level;
         }
       }
@@ -219,7 +219,7 @@ const WaterSortPuzzle = () => {
   };
 
   const nextLevel = () => {
-    if (currentLevel < 50) {
+    if (currentLevel < 100) {
       const nextLvl = currentLevel + 1;
       setCurrentLevel(nextLvl);
       setTubes(levels[nextLvl - 1].tubes);
@@ -263,7 +263,7 @@ const WaterSortPuzzle = () => {
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-white mb-2">Water Sort Puzzle</h1>
           <div className="flex justify-center items-center gap-6 text-lg">
-            <span className="px-4 py-2 bg-gray-800 text-white rounded-lg shadow">Level: {currentLevel}/50</span>
+            <span className="px-4 py-2 bg-gray-800 text-white rounded-lg shadow">Level: {currentLevel}/100</span>
             <span className="px-4 py-2 bg-gray-800 text-white rounded-lg shadow">Moves: {moveCount}</span>
           </div>
         </div>
@@ -274,7 +274,7 @@ const WaterSortPuzzle = () => {
               <Trophy className="w-20 h-20 text-yellow-500 mx-auto mb-4" />
               <h2 className="text-3xl font-bold text-gray-800 mb-2">Level Complete!</h2>
               <p className="text-gray-600 mb-6">Completed in {moveCount} moves</p>
-              {currentLevel < 50 ? (
+              {currentLevel < 100 ? (
                 <button
                   onClick={nextLevel}
                   className="px-8 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition flex items-center gap-2 mx-auto"

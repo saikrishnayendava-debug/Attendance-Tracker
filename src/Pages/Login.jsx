@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 // import ToastNotification, { showToast } from '../Components/ToastNotification';
 import { MdAccountBox } from "react-icons/md"
 import logo from '../assets/logo.png'
 import { setState } from './Home';
+import { Search, X, Mic } from 'lucide-react';
+
 const Login = () => {
+  
   const navigate = useNavigate();
   const [data, setData] = useState({
     redgNo: localStorage.getItem("redgNo") || "",
@@ -13,8 +16,24 @@ const Login = () => {
   })
   const [code, setCode] = useState("VIIT")
   const [isViit, setIsViit] = useState(true);
-  const [isServer, setIsServer] = useState(true)
-  const [server, setServer] = useState(1);
+  const [searchText, setSearchText] = useState('attendance tracker viit');
+
+  const searchResults = [
+    {
+     
+      title: 'Vercel',
+      url: 'https://attendancetracker-six.vercel.app',
+      heading: 'Attendance Tracker',
+      description: 'Track student attendance instantly. View daily attendance, summaries, and reports with a fast, simple attendance tracking system.'
+    },
+    {
+     
+      title: 'attendancetracker.co.in',
+      url: 'https://attendancetracker.co.in',
+      heading: 'Attendance Tracker',
+      description: 'Track student attendance instantly. View daily attendance, summaries, and reports with a fast, simple attendance tracking system.'
+    }
+  ];
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => {
@@ -45,13 +64,13 @@ const Login = () => {
     if (redgNo && password) {
       navigate("/home");
     }
-    
+
   }
   return (
 
     <section className='bg-black min-h-screen text-slate-200 flex flex-col items-center'>
-      
-      <div className='flex mt-20 flex-col items-center justify-center'>
+
+      <div className='flex mt-10 flex-col items-center justify-center'>
         <p className='font-bold text-3xl'>Attendance</p>
         <p className='font-bold text-4xl text-emerald-500'>Tracker</p>
       </div>
@@ -74,19 +93,97 @@ const Login = () => {
               <div className={`${isViit ? "bg-white text-black" : "border border-[#222528] "} w-full cursor-pointer rounded-2xl py-1.5 text-center text-xs font-semibold`} onClick={handleViit}>VIIT</div>
               <div className={`${!isViit ? "bg-white text-black" : "border border-[#222528] "} w-full cursor-pointer rounded-2xl py-1.5 text-center text-xs font-semibold `} onClick={handleView}>VIEW</div>
             </div>
-            <button className='bg-emerald-500 text-white cursor-pointer rounded py-1.5 font-semibold text-sm'>Submit</button>
+            <button className='bg-emerald-500 text-black cursor-pointer rounded py-1.5 font-bold text-sm'>Submit</button>
+            <div className='font-bold text-center'>Login once, use it forever</div>
           </form>
         </div>
       </div>
-      <div className='font-bold text-center mt-10'>Login once, use it forever</div>
-      <div className='fixed bottom-0 flex items-center justify-evenly text-slate-400 text-2xs  w-full'>
+
+      <div className="w-full bg-black text-white rounded-4xl">
+        {/* Search Bar */}
+        <div className=" px-2 py-4">
+          <div className="flex items-center bg-gray-700 rounded-full px-2 py-2 mx-auto">
+            <Search className="text-gray-400" size={16} />
+            <span className="flex-1 text-white text-sm mx-2">
+              {searchText}
+            </span>
+            <X className="text-gray-400 cursor-pointer mx-1" size={16} />
+            <div className="w-px h-4 bg-gray-600 mx-1"></div>
+            <Mic className="text-gray-400 cursor-pointer" size={16} />
+          </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className=" border-b border-gray-800">
+          <div className="flex items-center gap-4 px-2 overflow-x-auto">
+            <button className="text-gray-400 py-2 px-1 whitespace-nowrap hover:text-white text-xs">
+              AI Mode
+            </button>
+            <button className="text-white py-2 px-1 border-b-2 border-white whitespace-nowrap font-medium text-xs">
+              All
+            </button>
+            <button className="text-gray-400 py-2 px-1 whitespace-nowrap hover:text-white text-xs">
+              Images
+            </button>
+            <button className="text-gray-400 py-2 px-1 whitespace-nowrap hover:text-white text-xs">
+              Videos
+            </button>
+            <button className="text-gray-400 py-2 px-1 whitespace-nowrap hover:text-white text-xs">
+              News
+            </button>
+            <button className="text-gray-400 py-2 px-1 whitespace-nowrap hover:text-white text-xs">
+              Shopping
+            </button>
+          </div>
+        </div>
+
+        {/* Search Results */}
+        <Link to={"https://www.attendancetracker.co.in/"} className="px-2 py-3">
+          {searchResults.map((result, index) => (
+            <div key={index} className="mb-4">
+              {/* Site Info */}
+              <div className="flex items-center gap-2 mb-2">
+                <div
+                  className="w-7 h-6 rounded-full pl-1 flex items-center justify-center text-xs font-bold"
+                  
+                >
+                  <img src={logo} className='rounded-full' />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-gray-300 text-xs truncate">{result.title}</div>
+                  <div className="text-gray-500 text-xs truncate">{result.url}</div>
+                </div>
+                <button className="text-gray-400 hover:text-white">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="5" r="2" />
+                    <circle cx="12" cy="12" r="2" />
+                    <circle cx="12" cy="19" r="2" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Result Content */}
+              <div className="pl-8">
+                <h2 className="text-blue-400 text-sm mb-1 hover:underline cursor-pointer">
+                  {result.heading}
+                </h2>
+                <p className="text-gray-400 text-xs leading-relaxed">
+                  {result.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </Link>
+      </div>
+
+      <div className='fixed bottom-0 flex items-center justify-evenly bg-black text-slate-400 text-2xs  w-full'>
         <button onClick={() => navigate('/privacy-policy')}>Privacy Policy</button>
         <button onClick={() => navigate('/terms-and-conditions')}>Terms & Conditions:</button>
         <button onClick={() => navigate('/about')}>About Us</button>
         <button onClick={() => navigate('/contact')}>Contact Us</button>
       </div>
 
-      
+
     </section>
 
 

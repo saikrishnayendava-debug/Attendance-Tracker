@@ -380,11 +380,11 @@ const Home = () => {
 
       <div className=' mt-5 mx-1 flex items-center justify-around'>
 
-        <div className={`${totalPercentage >= 75 ? "bg-emerald-200" : "bg-orange-300"}  pt-2   h-40 w-40 rounded-3xl py-1 font-bold text-sm `}>
+        <div className={`${totalPercentage >= 75 ? "bg-emerald-200" : "bg-red-300"}  pt-2   h-40 w-40 rounded-3xl py-1 font-bold text-sm `}>
           {
             totalPercentage >= 75 ? (
               <div className='flex flex-col text-black font-extrabold items-center justify-center '>
-                <div>Periods can skip</div>
+                <div className='bg-green-400 rounded-md px-1'>Periods can skip</div>
                 <div className="flex flex-row w-full items-center justify-center">
                   <div className='text-6xl mt-6'>
                     {hoursCanSkip}
@@ -401,10 +401,10 @@ const Home = () => {
               </div>
             ) : (
               <div className='flex flex-col text-black font-bold items-center justify-center'>
-                <div>Periods to attend</div>
+                <div className='bg-red-500 rounded-md px-1'>Periods to attend</div>
                 <div className="flex flex-row w-full items-center justify-center">
 
-                  <div className='text-6xl mt-6 text-red-700'>{hoursNeeded}</div>
+                  <div className='text-6xl mt-6 text-black'>{hoursNeeded}</div>
                   {/* <MdBatteryAlert size={25} className='text-red-500' /> */}
 
                 </div>
@@ -422,7 +422,7 @@ const Home = () => {
 
 
         <div className='h-40 rounded-3xl border border-[#222528] shadow shadow-slate-800 py-1 font-extrabold text-sm w-40 flex flex-col items-center justify-center text-[#e6fdff]'>
-          <div className='bg-emerald-200 text-black rounded-2xl px-1'>Present attendance</div>
+          <div className='bg-yellow-400 text-black rounded-2xl px-1'>Present attendance</div>
           <div>
             {data.total_percentage
               ? <ChartComponent progress={data.total_percentage} />
@@ -530,8 +530,8 @@ const Home = () => {
                         disabled={isDisabled || loading}
                         onClick={() => { handleTempClick(index); setShowHolidayCalendar(false); setShowLeaveCalendar(false); }}
                         className={`
-            ${isSelected ? 'border border-[#222528] bg-black text-white' : 'bg-slate-200'} 
-            text-gray-900 w-6 h-6 rounded flex justify-center items-center font-extrabold text-sm 
+            ${isSelected ? 'border border-[#222528] bg-red-500' : 'bg-green-400'} 
+            text-black w-6 h-6 rounded flex justify-center items-center font-extrabold text-sm 
             ${isDisabled ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer'}
           `}
                       >
@@ -608,7 +608,7 @@ const Home = () => {
 
             <div className='grid'>
 
-              <button type='button' disabled={!(selectedPeriods.length > 0 || data.leaves.length > 0 || data.holidays.length > 0) || loading} onClick={handleReset} className='cursor-pointer bg-gray-700 text-white rounded py-2 font-extrabold text-sm flex gap-1 items-center justify-center'>
+              <button type='button' disabled={!(selectedPeriods.length > 0 || data.leaves.length > 0 || data.holidays.length > 0) || loading} onClick={handleReset} className='cursor-pointer bg-gray-700 rounded-lg text-white py-2 font-extrabold text-sm flex gap-1 items-center justify-center w-fit mx-auto px-20'>
                 Reset
                 <RiRefreshLine className='text-white rounded-md' size={20} />
               </button>
@@ -625,7 +625,7 @@ const Home = () => {
           <h1 className='text-center text-2xl font-bold text-slate-200'>Attendance as per data</h1>
           <p className='text-slate-200 text-center font-bold'>At the end of the day</p>
         </div>
-        
+
         <div className='flex flex-col items-center justify-center gap-2'>
           {
 
@@ -634,19 +634,30 @@ const Home = () => {
                 <div key={index} >
                   {
                     index === 0 && (
-                      <div className={` text-slate-200 rounded  flex justify-center gap-5 mb-1 `}>
-                      
-                      <div className='flex items-center gap-4'>
-                        <div className='flex gap-0.5'>
-                        <p className='w-4 h-4 rounded bg-green-400'></p>
-                        <p className='bg-lime-400 text-black rounded px-1 font-extrabold text-xs'>-periods can skip</p>
+                      <div className='flex flex-col justify-center items-center gap-1'>
+                        <div className={` text-slate-200 rounded  flex justify-center gap-5 mb-1 `}>
+
+                          <div className='flex items-center gap-4'>
+                            <div className='flex gap-0.5'>
+                              <p className='w-4 h-4 rounded bg-green-400'></p>
+                              <p className='bg-lime-400 text-black rounded px-1 font-extrabold text-xs'>-periods can skip</p>
+                            </div>
+                            <div className='flex gap-0.5'>
+                              <p className='w-4 h-4 rounded bg-red-400'></p>
+                              <p className='bg-red-500 text-black rounded px-1 font-extrabold text-xs'>-additional hours needed</p>
+                            </div>
+                          </div>
                         </div>
-                        <div className='flex gap-0.5'>
-                        <p className='w-4 h-4 rounded bg-red-400'></p>
-                        <p className='bg-red-500 text-black rounded px-1 font-extrabold text-xs'>-additional hours needed</p>
+                        <p className='mt-4 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>Present Attendance</p>
+                        <div className={`w-90  ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
+                          <p>{item.day} </p>
+                          <p className='font-extrabold'>{data.total_percentage} %</p>
+                          <p>{data.present} / {data.held}</p>
+                          <p className={`${item.attendence >= 75 ? "bg-green-400 " : "bg-red-400 "} text-black font-extrabold text-sm px-2 rounded`}>{data.total_percentage >= 75 ? data.hours_can_skip : data.hours_needed}</p>
                         </div>
+                        <p className='mt-2 mb-1 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>End of the day attendance</p>
+                        
                       </div>
-                    </div>
                     )
                   }
                   {(index === 0 && selectedPeriods.length > 0) ? (
@@ -657,16 +668,15 @@ const Home = () => {
                       <p className='font-extrabold'>{item.attendence} %</p>
                       <div className='font-extrabold flex gap-5 text-[#fc9999]'>
 
-                        <p>{7 - selectedPeriods.length} / 7</p>
-                        <p>
-                          -{selectedPeriods.length}
-                        </p>
+                        <p>{item.present} / {item.held}</p>
+                        <p className={`${item.attendence >= 75 ? "bg-green-400 " : "bg-red-400 "} text-black font-extrabold text-sm px-2 rounded`}>{item.attendence >= 75 ? item.hoursCanSkip : item.additionalHoursNeeded}</p>
+
 
                       </div>
                     </div>
 
                   ) : (
-                    <div className={`w-90 ${index === 0 && "mb-8"}  ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
+                    <div className={`w-90   ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
                       <p>{item.day} </p>
 
 
