@@ -5,7 +5,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { MdAccountBox } from "react-icons/md"
 import logo from '../assets/logo.png'
 import { setState } from './Home';
-import { Search, X, Mic } from 'lucide-react';
+import { MessageCircle, Search, X, Mic, Instagram } from 'lucide-react';
 
 const Login = () => {
   
@@ -20,20 +20,61 @@ const Login = () => {
 
   const searchResults = [
     {
-     
       title: 'Vercel',
       url: 'https://attendancetracker-six.vercel.app',
       heading: 'Attendance Tracker',
       description: 'Track student attendance instantly. View daily attendance, summaries, and reports with a fast, simple attendance tracking system.'
     },
     {
-     
       title: 'attendancetracker.co.in',
       url: 'https://attendancetracker.co.in',
       heading: 'Attendance Tracker',
       description: 'Track student attendance instantly. View daily attendance, summaries, and reports with a fast, simple attendance tracking system.'
     }
   ];
+
+  const handleWhatsAppShare = () => {
+    const title = 'Attendance Tracker';
+    const url = 'https://attendancetracker.co.in';
+    const description = 'Track student attendance instantly with this simple tracking system!';
+    
+    const text = encodeURIComponent(`${title}\n\n${description}\n\n${url}`);
+    
+    // Check if mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    const whatsappUrl = isMobile 
+      ? `whatsapp://send?text=${text}` 
+      : `https://web.whatsapp.com/send?text=${text}`;
+    
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleInstagramShare = () => {
+    const url = 'https://attendancetracker.co.in';
+    
+    // Check if mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // Try to open Instagram app
+      window.location.href = 'instagram://';
+      
+      // Fallback to Instagram web if app doesn't open
+      setTimeout(() => {
+        window.open('https://www.instagram.com/', '_blank');
+      }, 500);
+    } else {
+      // For desktop, open Instagram and copy URL to clipboard
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Link copied! Open Instagram and paste it in your story or post.');
+        window.open('https://www.instagram.com/', '_blank');
+      }).catch(() => {
+        window.open('https://www.instagram.com/', '_blank');
+      });
+    }
+  };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => {
@@ -43,14 +84,17 @@ const Login = () => {
       }
     })
   }
+
   const handleViit = () => {
     setCode("VIIT");
     setIsViit(true);
   }
+
   const handleView = () => {
     setCode("VIEW");
     setIsViit(false);
   }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     const redgNo = data.redgNo
@@ -64,17 +108,16 @@ const Login = () => {
     if (redgNo && password) {
       navigate("/home");
     }
-
   }
+
   return (
-
     <section className='bg-black min-h-screen text-slate-200 flex flex-col items-center'>
-
       <div className='flex mt-10 flex-col items-center justify-center'>
         <p className='font-bold text-3xl'>Attendance</p>
         <p className='font-bold text-4xl text-emerald-500'>Tracker</p>
       </div>
-      <div className='top-0 bottom-0 left-0 right-0 flex justify-center items-center h-105  '>
+
+      <div className='top-0 bottom-0 left-0 right-0 flex justify-center items-center h-105'>
         <div className='border border-[#222528] rounded-2xl w-85'>
           <form action="" className='grid p-5 rounded-2xl gap-4' onSubmit={handleSubmit}>
             <div className='flex justify-center items-center gap-1'>
@@ -82,26 +125,75 @@ const Login = () => {
               <p className='font-bold'>Login</p>
             </div>
             <div className='flex flex-col gap-2'>
-              <label htmlFor="RedgNo" className=' font-semibold text-sm'>Registration Number</label>
-              <input type='text' id='RedgNo' placeholder='22L31A05O8' className='bg-black border border-[#222528]  text-center font-semibold rounded px-2 py-1 text-sm' onChange={handleOnChange} name="redgNo" value={data.redgNo} />
+              <label htmlFor="RedgNo" className='font-semibold text-sm'>Registration Number</label>
+              <input 
+                type='text' 
+                id='RedgNo' 
+                placeholder='22L31A05O8' 
+                className='bg-black border border-[#222528] text-center font-semibold rounded px-2 py-1 text-sm' 
+                onChange={handleOnChange} 
+                name="redgNo" 
+                value={data.redgNo} 
+              />
             </div>
             <div className='flex flex-col gap-2'>
-              <label htmlFor="pass" className='font-semibold t text-sm'>Password</label>
-              <input type='text' id='pass' placeholder='26112007' className='border border-[#222528] bg-black text-center  rounded font-semibold px-2 py-1  text-sm' onChange={handleOnChange} name='password' value={data.password} />
+              <label htmlFor="pass" className='font-semibold text-sm'>Password</label>
+              <input 
+                type='text' 
+                id='pass' 
+                placeholder='26112007' 
+                className='border border-[#222528] bg-black text-center rounded font-semibold px-2 py-1 text-sm' 
+                onChange={handleOnChange} 
+                name='password' 
+                value={data.password} 
+              />
             </div>
             <div className='flex justify-around gap-2'>
-              <div className={`${isViit ? "bg-white text-black" : "border border-[#222528] "} w-full cursor-pointer rounded-2xl py-1.5 text-center text-xs font-semibold`} onClick={handleViit}>VIIT</div>
-              <div className={`${!isViit ? "bg-white text-black" : "border border-[#222528] "} w-full cursor-pointer rounded-2xl py-1.5 text-center text-xs font-semibold `} onClick={handleView}>VIEW</div>
+              <div 
+                className={`${isViit ? "bg-white text-black" : "border border-[#222528]"} w-full cursor-pointer rounded-2xl py-1.5 text-center text-xs font-semibold`} 
+                onClick={handleViit}
+              >
+                VIIT
+              </div>
+              <div 
+                className={`${!isViit ? "bg-white text-black" : "border border-[#222528]"} w-full cursor-pointer rounded-2xl py-1.5 text-center text-xs font-semibold`} 
+                onClick={handleView}
+              >
+                VIEW
+              </div>
             </div>
-            <button className='bg-emerald-500 text-black cursor-pointer rounded py-1.5 font-bold text-sm'>Submit</button>
+            <button className='bg-emerald-500 text-black cursor-pointer rounded py-1.5 font-bold text-sm'>
+              Submit
+            </button>
             <div className='font-bold text-center'>Login once, use it forever</div>
           </form>
         </div>
       </div>
 
+      {/* Social Share Section */}
+      <div className='flex flex-col items-center gap-3 my-4'>
+        <p className='font-extrabold'>Share to your friends</p>
+        <div className='flex gap-3'>
+          <button
+            onClick={handleWhatsAppShare}
+            className='flex items-center gap-2 bg-green-500 text-white p-1.5 rounded-lg hover:bg-green-600 transition-colors font-bold text-xs'
+          >
+            <MessageCircle size={18} />
+            <span>WhatsApp</span>
+          </button>
+          <button
+            onClick={handleInstagramShare}
+            className='flex items-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white p-1.5 rounded-lg hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 transition-colors font-bold text-xs'
+          >
+            <Instagram size={18} />
+            <span>Instagram</span>
+          </button>
+        </div>
+      </div>
+
       <div className="w-full bg-black text-white rounded-4xl">
         {/* Search Bar */}
-        <div className=" px-2 py-4">
+        <div className="px-2 py-4">
           <div className="flex items-center bg-gray-700 rounded-full px-2 py-2 mx-auto">
             <Search className="text-gray-400" size={16} />
             <span className="flex-1 text-white text-sm mx-2">
@@ -114,7 +206,7 @@ const Login = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className=" border-b border-gray-800">
+        <div className="border-b border-gray-800">
           <div className="flex items-center gap-4 px-2 overflow-x-auto">
             <button className="text-gray-400 py-2 px-1 whitespace-nowrap hover:text-white text-xs">
               AI Mode
@@ -138,16 +230,19 @@ const Login = () => {
         </div>
 
         {/* Search Results */}
-        <Link to={"https://www.attendancetracker.co.in/"} className="px-2 py-3">
+        <div className="px-2 py-3">
           {searchResults.map((result, index) => (
-            <div key={index} className="mb-4">
+            <a 
+              key={index} 
+              href={result.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block mb-4 hover:bg-gray-900 rounded p-2 transition-colors"
+            >
               {/* Site Info */}
               <div className="flex items-center gap-2 mb-2">
-                <div
-                  className="w-7 h-6 rounded-full pl-1 flex items-center justify-center text-xs font-bold"
-                  
-                >
-                  <img src={logo} className='rounded-full' />
+                <div className="w-7 h-6 rounded-full pl-1 flex items-center justify-center text-xs font-bold">
+                  <img src={logo} className='rounded-full' alt="logo" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-gray-300 text-xs truncate">{result.title}</div>
@@ -171,22 +266,18 @@ const Login = () => {
                   {result.description}
                 </p>
               </div>
-            </div>
+            </a>
           ))}
-        </Link>
+        </div>
       </div>
 
-      <div className='fixed bottom-0 flex items-center justify-evenly bg-black text-slate-400 text-2xs  w-full'>
+      <div className='fixed bottom-0 flex items-center justify-evenly bg-black text-slate-400 text-2xs w-full py-2'>
         <button onClick={() => navigate('/privacy-policy')}>Privacy Policy</button>
-        <button onClick={() => navigate('/terms-and-conditions')}>Terms & Conditions:</button>
+        <button onClick={() => navigate('/terms-and-conditions')}>Terms & Conditions</button>
         <button onClick={() => navigate('/about')}>About Us</button>
         <button onClick={() => navigate('/contact')}>Contact Us</button>
       </div>
-
-
     </section>
-
-
   )
 }
 
