@@ -6,14 +6,14 @@ import {
 } from './utils.js';
 
 function attendenceCalculator(
-  holidays,
-  leaves,
-  daysToPredict,
-  periods_present,
-  total_periods_held,
-  startDate,
-  sundays,
-  periods_per_day
+  holidays=[],
+  leaves=[],
+  daysToPredict=0,
+  periods_present=0,
+  total_periods_held=0,
+  startDate = new Date(),
+  sundays=[],
+  periods_per_day=0
 ) {
   const result = [];
   let present = periods_present;
