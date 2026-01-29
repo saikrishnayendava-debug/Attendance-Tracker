@@ -29,6 +29,198 @@ export const setState = (val) => {
   state = val
 }
 export const getState = () => state;
+
+// Swipeable Item Component
+const SwipeableAttendanceItem = ({ item, index, onSwipeLeft, onSwipeRight, onSwipeUndo, isFirst, tempCnt, totalPercentage, present, held, hoursCanSkip, hoursNeeded, swipedItems }) => {  
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+
+  const minSwipeDistance = 30;
+
+  // Check if this item is already swiped and in what direction
+  const currentSwipeStatus = swipedItems[index] || null; // 'leave', 'holiday', or null
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+    if (touchStart) {
+      const distance = e.targetTouches[0].clientX - touchStart;
+      setSwipeOffset(distance);
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) {
+      setSwipeOffset(0);
+      return;
+    }
+
+    const distance = touchStart - touchEnd;
+    const isRightToLeftSwipe = distance > minSwipeDistance; // Swiping right to left (leave)
+    const isLeftToRightSwipe = distance < -minSwipeDistance; // Swiping left to right (holiday)
+
+    if (isRightToLeftSwipe) {
+      // Right to Left swipe
+      if (currentSwipeStatus === 'leave') {
+        // Already a leave, do nothing
+      } else if (currentSwipeStatus === 'holiday') {
+        // Was holiday, undo it
+        onSwipeUndo(item, index);
+      } else {
+        // Not swiped yet, make it leave
+        onSwipeLeft(item, index);
+      }
+    } else if (isLeftToRightSwipe) {
+      // Left to Right swipe
+      if (currentSwipeStatus === 'holiday') {
+        // Already a holiday, do nothing
+      } else if (currentSwipeStatus === 'leave') {
+        // Was leave, undo it
+        onSwipeUndo(item, index);
+      } else {
+        // Not swiped yet, make it holiday
+        onSwipeRight(item, index);
+      }
+    }
+
+    setSwipeOffset(0);
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  return (
+    <div key={index}>
+  {index === 0 && (
+    <div className='flex flex-col justify-center items-center gap-1'>
+      <div className='text-slate-200 rounded flex justify-center gap-5 mb-1'>
+        <div className='flex items-center gap-4'>
+          <div className='flex gap-0.5'>
+            <p className='w-4 h-4 rounded bg-green-400'></p>
+            <p className='bg-lime-400 text-black rounded px-1 font-extrabold text-xs'>
+              -periods can skip
+            </p>
+          </div>
+          <div className='flex gap-0.5'>
+            <p className='w-4 h-4 rounded bg-red-400'></p>
+            <p className='bg-red-500 text-black rounded px-1 font-extrabold text-xs'>
+              -additional hours needed
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p className='text-xs text-slate-400 text-center mb-2'>
+        👉 Swipe right for Leave | Swipe left for Holiday 👈
+      </p>
+
+      <p className='mt-4 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
+        Present Attendance
+      </p>
+
+      <div
+        className={`w-90 ${
+          item.status === 0
+            ? "text-[#fc9999] border border-red-500"
+            : item.status === 1
+            ? "text-yellow-300 border border-yellow-400 bg-yellow-400/10"
+            : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184]"
+        } py-1.5 rounded font-bold flex justify-around text-sm`}
+      >
+        <p>{item.day}</p>
+        <p className='font-extrabold'>{totalPercentage} %</p>
+        <p>{present} / {held}</p>
+        <p
+          className={`${
+            totalPercentage >= 75 ? "bg-green-400" : "bg-red-400"
+          } text-black font-extrabold text-sm px-2 rounded`}
+        >
+          {totalPercentage >= 75 ? hoursCanSkip : hoursNeeded}
+        </p>
+      </div>
+
+      <p className='mt-2 mb-1 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
+        End of the day attendance
+      </p>
+    </div>
+  )}
+
+  <div
+    className='relative overflow-hidden'
+    onTouchStart={onTouchStart}
+    onTouchMove={onTouchMove}
+    onTouchEnd={onTouchEnd}
+  >
+    <div className='absolute inset-0 flex justify-between items-center pointer-events-none z-0'>
+      <div
+        className={`h-full w-20 bg-red-500/50 flex items-center justify-start pl-4 transition-opacity ${
+          swipeOffset < -30 ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <span className='text-white font-bold text-xs'>Leave</span>
+      </div>
+      <div
+        className={`h-full w-20 bg-green-500/50 flex items-center justify-end pr-4 transition-opacity ${
+          swipeOffset > 30 ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <span className='text-white font-bold text-xs'>Holiday</span>
+      </div>
+    </div>
+
+    <div
+      style={{ transform: `translateX(${swipeOffset}px)` }}
+      className={`w-90 ${
+        index === 0 && tempCnt > 0 ? "mb-8" : ""
+      } ${
+        item.status === 0
+          ? "text-[#fc9999] border border-red-500"
+          : item.status === 1
+          ? "text-slate-200 border border-blue-400 bg-blue-400/10 "
+          : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184]"
+      } py-1.5 rounded font-bold flex justify-around text-sm transition-transform relative z-10`}
+    >
+      <p>{item.day}</p>
+      <p className='font-extrabold'>{item.attendence} %</p>
+
+      {index === 0 && tempCnt > 0 ? (
+        <div className='font-extrabold flex gap-5 text-[#fc9999]'>
+          <p>{item.present} / {item.held}</p>
+          <p
+            className={`${
+              item.attendence >= 75 ? "bg-green-400" : "bg-red-400"
+            } text-black font-extrabold text-sm px-2 rounded`}
+          >
+            {item.attendence >= 75
+              ? item.hoursCanSkip
+              : item.additionalHoursNeeded}
+          </p>
+        </div>
+      ) : (
+        <>
+          <p>{item.present} / {item.held}</p>
+          <p
+            className={`${
+              item.attendence >= 75 ? "bg-green-400" : "bg-red-400"
+            } text-black font-extrabold text-sm px-2 rounded`}
+          >
+            {item.attendence >= 75
+              ? item.hoursCanSkip
+              : item.additionalHoursNeeded}
+          </p>
+        </>
+      )}
+    </div>
+  </div>
+</div>
+
+  );
+};
+
 const Home = () => {
   const navigate = useNavigate()
   const [data, setData] = useState({
@@ -87,22 +279,21 @@ const Home = () => {
     localStorage.getItem("frnd_latestAttendanceData") || ""
   );
 
-
   const [frndPeriods, setFrndPeriods] = useState(null);
-  // const [animationClick, setAnimationClick] = useState(false);
+  const [swipedItems, setSwipedItems] = useState({}); // Track swiped items: { index: 'leave' | 'holiday' }
+
   const handleTempClick = (index) => {
     setSelectedPeriods(prev => {
       if (prev.includes(index)) {
-        return prev.filter(i => i !== index); // unselect
+        return prev.filter(i => i !== index);
       } else {
-        return [...prev, index]; // select
+        return [...prev, index];
       }
     });
   };
 
-
   const attendanceArray = useMemo(() => {
-    const leavesArray = [...data.leaves]; // Date[]
+    const leavesArray = [...data.leaves];
     const holidaysArray = [...data.holidays];
     return attendenceCalculator(
       holidaysArray,
@@ -124,7 +315,96 @@ const Home = () => {
     cnt,
     sundayArray
   ]);
- 
+
+  const handleSwipeLeft = (item, index) => {
+    // Parse date from UTC string format like "29 Jan 2026"
+    const date = item.date ? new Date(item.date) : parseUTCDateString(item.day);
+    
+    if (date && !isNaN(date.getTime())) {
+      setData(prev => {
+        const exists = prev.leaves.some(d => d.toDateString() === date.toDateString());
+        const filtered = prev.holidays.filter(d => d.toDateString() !== date.toDateString());
+        
+        return {
+          ...prev,
+          holidays: filtered,
+          leaves: exists ? prev.leaves : [...prev.leaves, date]
+        };
+      });
+
+      // Mark this item as swiped to 'leave'
+      setSwipedItems(prev => ({
+        ...prev,
+        [index]: 'leave'
+      }));
+    }
+  };
+
+  const handleSwipeRight = (item, index) => {
+    // Parse date from UTC string format like "29 Jan 2026"
+    const date = item.date ? new Date(item.date) : parseUTCDateString(item.day);
+    
+    if (date && !isNaN(date.getTime())) {
+      setData(prev => {
+        const exists = prev.holidays.some(d => d.toDateString() === date.toDateString());
+        const filtered = prev.leaves.filter(d => d.toDateString() !== date.toDateString());
+        
+        return {
+          ...prev,
+          leaves: filtered,
+          holidays: exists ? prev.holidays : [...prev.holidays, date]
+        };
+      });
+
+      // Mark this item as swiped to 'holiday'
+      setSwipedItems(prev => ({
+        ...prev,
+        [index]: 'holiday'
+      }));
+    }
+  };
+
+  const handleSwipeUndo = (item, index) => {
+    // Parse date from UTC string format like "29 Jan 2026"
+    const date = item.date ? new Date(item.date) : parseUTCDateString(item.day);
+    
+    if (date && !isNaN(date.getTime())) {
+      setData(prev => ({
+        ...prev,
+        leaves: prev.leaves.filter(d => d.toDateString() !== date.toDateString()),
+        holidays: prev.holidays.filter(d => d.toDateString() !== date.toDateString())
+      }));
+
+      // Remove swipe status
+      setSwipedItems(prev => {
+        const newState = { ...prev };
+        delete newState[index];
+        return newState;
+      });
+    }
+  };
+
+  // Helper function to parse UTC date strings
+  const parseUTCDateString = (dateStr) => {
+    // Handle format like "29 Jan 2026"
+    const months = {
+      'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+      'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+    };
+    
+    const parts = dateStr.split(' ');
+    if (parts.length >= 3) {
+      const day = parseInt(parts[0]);
+      const month = months[parts[1]];
+      const year = parseInt(parts[2]);
+      
+      if (!isNaN(day) && month !== undefined && !isNaN(year)) {
+        return new Date(year, month, day);
+      }
+    }
+    
+    return null;
+  };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target
@@ -141,15 +421,14 @@ const Home = () => {
     }))
   }
 
-
   const handleLeaveDayClick = (date) => {
     setData(prev => {
       const exists = prev.leaves.some(d => d.toDateString() === date.toDateString())
       return {
         ...prev,
         leaves: exists
-          ? prev.leaves.filter(d => d.toDateString() !== date.toDateString()) // remove if clicked again
-          : [...prev.leaves, date] // add new date
+          ? prev.leaves.filter(d => d.toDateString() !== date.toDateString())
+          : [...prev.leaves, date]
       }
     })
   }
@@ -166,7 +445,6 @@ const Home = () => {
     })
   }
 
-
   const handleReset = () => {
     setData(prev => ({
       ...prev,
@@ -174,8 +452,8 @@ const Home = () => {
       holidays: []
     }));
 
-
     setSelectedPeriods([]);
+    setSwipedItems({});
     setShowLeaveCalendar(false);
     setShowHolidayCalendar(false);
   }
@@ -186,7 +464,7 @@ const Home = () => {
   const url =
     code === "VIEW"
       ? `https://womens-api.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-      : `https://viit-main-api-teal.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`; /*saikrishna */
+      : `https://viit-main-api-teal.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`;
 
   const sendLog = async (status) => {
     try {
@@ -207,7 +485,6 @@ const Home = () => {
       sendLog(200);
       localStorage.setItem("latestAttendanceData", JSON.stringify(response.data));
 
-      // const totals = getAttendanceTotals(response.data)
       const now = new Date().toLocaleString('en-IN', {
         day: '2-digit',
         month: '2-digit',
@@ -233,12 +510,6 @@ const Home = () => {
 
       const todayData = getAttendanceTodayArray(response.data);
       setTodayPeriodsPosted(todayData);
-      // console.log(result)
-
-
-
-
-
 
     } catch (error) {
       sendLog(500)
@@ -261,8 +532,6 @@ const Home = () => {
           total_percentage: parsedData.total_info?.total_percentage || '',
         }));
 
-
-
         const todayData = getAttendanceTodayArray(parsedData);
         setTodayPeriodsPosted(todayData);
 
@@ -270,12 +539,12 @@ const Home = () => {
       }
     }
 
-
     finally {
       setAnimate(false);
       setLoading(false);
     }
   }
+
   const fetchAttendance2 = async () => {
     try {
       setLoading2(true);
@@ -284,7 +553,6 @@ const Home = () => {
       sendLog(200);
       localStorage.setItem("latestAttendanceData", JSON.stringify(response.data));
 
-      // const totals = getAttendanceTotals(response.data)
       const now = new Date().toLocaleString('en-IN', {
         day: '2-digit',
         month: '2-digit',
@@ -310,12 +578,6 @@ const Home = () => {
 
       const todayData = getAttendanceTodayArray(response.data);
       setTodayPeriodsPosted(todayData);
-      // console.log(result)
-
-
-
-
-
 
     } catch (error) {
       sendLog(500)
@@ -338,8 +600,6 @@ const Home = () => {
           total_percentage: parsedData.total_info?.total_percentage || '',
         }));
 
-
-
         const todayData = getAttendanceTodayArray(parsedData);
         setTodayPeriodsPosted(todayData);
 
@@ -347,18 +607,11 @@ const Home = () => {
       }
     }
 
-
     finally {
       setAnimate(false);
       setLoading2(false);
     }
   }
-
-
-
-
-
-
 
   const fetch_frnd_Attendance = async () => {
     try {
@@ -380,10 +633,7 @@ const Home = () => {
       setFrndPeriods(todayData);
       localStorage.setItem("frnd_latestAttendanceData", JSON.stringify(response.data.total_info?.total_percentage));
 
-
-
     } catch (error) {
-      // showToast("Serverlu crash aypotunai darlings mee requests ki, naa app issue kadhu college website issue, 1 hr tarwartha try cheyandi");
       showToast("Failed to fetch frnd attendance");
       return;
 
@@ -394,14 +644,11 @@ const Home = () => {
     }
   }
 
-
-
   useEffect(() => {
     setAnimate(true);
     setSelectedPeriods([]);
     if (getState()) fetchAttendance();
     const storedData = JSON.parse(localStorage.getItem("latestAttendanceData"))?.total_info || {};
-
 
     const cached = localStorage.getItem("latestAttendanceData");
     const parsedData = cached ? JSON.parse(cached) : null;
@@ -430,30 +677,16 @@ const Home = () => {
     }
   }, [])
 
-
-
-
-
   const totalPercentage = data.total_percentage || cachedValues.totalPercentage;
   const hoursCanSkip = data.hours_can_skip || cachedValues.hoursCanSkip;
   const hoursNeeded = data.hours_needed || cachedValues.hoursNeeded;
 
-
-
-
-
-
   return (
-
     <section className={` bg-black min-h-screen`}>
-      {/* <ToastNotification /> */}
       <Header />
       <Navbar />
-      {/* <p className={`h-fit text-xs font-bold animate-pulse text-center text-slate-200`}>Dont <span className='text-red-500'>reload</span> the page, click the fetch attendance button below</p> */}
-
 
       <div className=' mt-5 mx-1 flex items-center justify-around'>
-
         <div className={`${totalPercentage >= 75 ? "bg-emerald-200" : "bg-red-300"}  pt-2   h-40 w-40 rounded-3xl py-1 text-sm `}>
           {
             totalPercentage >= 75 ? (
@@ -463,24 +696,18 @@ const Home = () => {
                   <div className='text-6xl mt-6'>
                     {hoursCanSkip}
                   </div>
-                  {/* <IoMdBatteryFull size={25} className='text-green-500' /> */}
                   <ImPower />
                 </div>
                 <div className='mt-4 flex gap-1'>
                   <p className='bg-green-500 text-black rounded-md p-1'>{Math.floor(hoursCanSkip / 7)} days</p>
                   <p className='bg-black text-green-500 rounded-md p-1' rounded p-1> {hoursCanSkip % 7} periods</p>
-
                 </div>
-
               </div>
             ) : (
               <div className='flex flex-col text-black font-bold items-center justify-center'>
                 <div className='px-1 font-extrabold'>Periods to attend</div>
                 <div className="flex flex-row w-full items-center justify-center">
-
                   <div className='text-6xl mt-6 text-black'>{hoursNeeded}</div>
-                  {/* <MdBatteryAlert size={25} className='text-red-500' /> */}
-
                 </div>
                 <div className='mt-4 flex gap-1'>
                   <p className='bg-red-500 rounded-md p-1'>{Math.floor(hoursNeeded / 7)} days</p>
@@ -489,11 +716,7 @@ const Home = () => {
               </div>
             )
           }
-
-
         </div>
-
-
 
         <div className='h-40 rounded-3xl border border-[#222528] shadow shadow-slate-800 py-1 font-extrabold text-sm w-40 flex flex-col items-center justify-center text-[#e6fdff]'>
           <div className=' rounded-2xl px-1 text-green-400'>Present attendance</div>
@@ -504,14 +727,9 @@ const Home = () => {
             }
           </div>
         </div>
-
       </div>
 
-
-
-
       <div className='top-0 bottom-0 left-0 right-0 flex justify-center mt-3'>
-
         <div className=' w-105 text-slate-200'>
           <form className='grid gap-5'>
             <div className=' grid p-5 gap-5 rounded-md border border-[#222528] text-slate-200'>
@@ -522,11 +740,9 @@ const Home = () => {
                 <label htmlFor="present" className='text-xs font-semibold'>
                   Number of periods attended
                 </label>
-
                 <input
                   type='number'
                   id='present'
-
                   className='bg-black border  border-[#222528] font-bold rounded px-2 py-1  text-sm text-center focus:outline-none focus:ring-0 focus:border-emerald-500'
                   name='present'
                   value={data.present}
@@ -535,7 +751,6 @@ const Home = () => {
                   onChange={handleOnChange}
                 />
               </div>
-
 
               <div className='grid grid-cols-2 gap-2'>
                 <label htmlFor="held" className='text-xs font-semibold '>
@@ -552,6 +767,7 @@ const Home = () => {
                   onChange={handleOnChange}
                 />
               </div>
+
               <div className='bg-black border  border-[#222528] p-1.5 rounded'>
                 <div className='text-center text-xs mb-1 font-bold '>Today attendance status</div>
                 <div className='flex gap-2 items-center flex-wrap'>
@@ -569,14 +785,12 @@ const Home = () => {
               </div>
 
               <div className='flex items-center justify-evenly gap-2'>
-
                 <button type='button' onClick={fetchAttendance} className={`relative cursor-pointer bg-white rounded-lg py-1 h-13 font-extrabold text-black text-sm w-full flex items-center justify-center overflow-hidden gap-1.5 `}
                   disabled={loading || loading2}>
                   {loading && (
                     <span className="absolute left-0 top-0 h-full w-full bg-gray-600 animate-pulse opacity-90"></span>
                   )}
                   <span className={`relative ${loading ? " " : ""}`}>
-
                     {
                       !localStorage.getItem("redgNo") || !localStorage.getItem("password")
                         ? "Login to fetch"
@@ -585,8 +799,6 @@ const Home = () => {
                           : <div className='flex flex-col items-center justify-center'><p>Fetch Attendance 1</p><p className='text-2xs text-slate-800'>Fastest Server</p></div>
                     }
                   </span>
-
-
                 </button>
 
                 <button type='button' onClick={fetchAttendance2} className={`relative cursor-pointer bg-white rounded-lg py-1 h-13 font-extrabold text-black text-sm w-full flex items-center justify-center overflow-hidden gap-1.5 `}
@@ -595,7 +807,6 @@ const Home = () => {
                     <span className="absolute left-0 top-0 h-full w-full bg-gray-600 animate-pulse opacity-90"></span>
                   )}
                   <span className={`relative ${loading2 ? " " : ""}`}>
-
                     {
                       !localStorage.getItem("redgNo") || !localStorage.getItem("password")
                         ? "Login to fetch"
@@ -604,7 +815,6 @@ const Home = () => {
                           : <div className='flex flex-col items-center justify-center'><p>Fetch Attendance 2</p><p className='text-2xs text-slate-800'>Flexible Server</p></div>
                     }
                   </span>
-
                 </button>
               </div>
               <p className='text-2xs  font-semibold'>Last updated: {lastUpdated}</p>
@@ -634,13 +844,7 @@ const Home = () => {
                   })}
                 </div>
               </div>
-
-
             </div>
-
-            
-
-
 
             <div className='grid grid-cols-2 bg-black border  border-[#222528] p-2 rounded '>
               <label className='font-bold text-sm flex flex-col py-1 px-2'>
@@ -652,7 +856,6 @@ const Home = () => {
               }</button>
               {
                 showLeaveCalendar && (
-
                   <Calendar
                     className={'text-black'}
                     onClickDay={handleLeaveDayClick}
@@ -669,16 +872,13 @@ const Home = () => {
               }
             </div>
 
-
             <div className='grid grid-cols-2  bg-black border  border-[#222528]  p-2 rounded'>
               <label className='font-semibold text-sm flex flex-col py-1 px-2'>
                 Holiday dates
                 <span className='text-2xs text-slate-500 font-semibold'>Select dates of public holidays</span>
-
               </label>
               <button type='button' onClick={() => setShowHolidayCalendar(!showHolidayCalendar)} className=' cursor-pointer ml-30 p-2 bg-emerald-300 w-fit rounded-lg'>
                 <BsCalendarDateFill className='text-black  rounded' size={30} />
-
               </button>
               {
                 showHolidayCalendar && (
@@ -695,29 +895,20 @@ const Home = () => {
                       minDate={minDate}
                       maxDate={maxDate}
                     />
-
                   </>
                 )
               }
-
             </div>
 
             <div className='grid'>
-
               <button type='button' disabled={!(selectedPeriods.length > 0 || data.leaves.length > 0 || data.holidays.length > 0) || loading} onClick={handleReset} className='cursor-pointer bg-gray-700 rounded-lg text-white py-2 font-extrabold text-sm flex gap-1 items-center justify-center w-fit mx-auto px-20'>
                 Reset
                 <RiRefreshLine className='text-white rounded-md' size={20} />
               </button>
             </div>
-
-
           </form>
         </div>
-
       </div>
-
-
-
 
       <div className=' sm:105  mt-5 rounded-md'>
         <div className='my-5'>
@@ -726,101 +917,44 @@ const Home = () => {
         </div>
 
         <div className='flex flex-col items-center justify-center gap-2'>
-          {
-
-            attendanceArray?.map((item, index) => {
-              return (
-                <div key={index} >
-                  {
-                    index === 0 && (
-                      <div className='flex flex-col justify-center items-center gap-1'>
-                        <div className={` text-slate-200 rounded  flex justify-center gap-5 mb-1 `}>
-
-                          <div className='flex items-center gap-4'>
-                            <div className='flex gap-0.5'>
-                              <p className='w-4 h-4 rounded bg-green-400'></p>
-                              <p className='bg-lime-400 text-black rounded px-1 font-extrabold text-xs'>-periods can skip</p>
-                            </div>
-                            <div className='flex gap-0.5'>
-                              <p className='w-4 h-4 rounded bg-red-400'></p>
-                              <p className='bg-red-500 text-black rounded px-1 font-extrabold text-xs'>-additional hours needed</p>
-                            </div>
-                          </div>
-                        </div>
-                        <p className='mt-4 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>Present Attendance</p>
-                        <div className={`w-90  ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
-                          <p>{item.day} </p>
-                          <p className='font-extrabold'>{data.total_percentage} %</p>
-                          <p>{data.present} / {data.held}</p>
-                          <p className={`${item.attendence >= 75 ? "bg-green-400 " : "bg-red-400 "} text-black font-extrabold text-sm px-2 rounded`}>{data.total_percentage >= 75 ? data.hours_can_skip : data.hours_needed}</p>
-                        </div>
-                        <p className='mt-2 mb-1 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>End of the day attendance</p>
-
-                      </div>
-                    )
-                  }
-                  {(index === 0 && selectedPeriods.length > 0) ? (
-                    <div className={`w-90 mb-8  ${(tempCnt === 7) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
-                      <p>{item.day}</p>
-
-
-                      <p className='font-extrabold'>{item.attendence} %</p>
-                      <div className='font-extrabold flex gap-5 text-[#fc9999]'>
-
-                        <p>{item.present} / {item.held}</p>
-                        <p className={`${item.attendence >= 75 ? "bg-green-400 " : "bg-red-400 "} text-black font-extrabold text-sm px-2 rounded`}>{item.attendence >= 75 ? item.hoursCanSkip : item.additionalHoursNeeded}</p>
-
-
-                      </div>
-                    </div>
-
-                  ) : (
-                    <div className={`w-90   ${(item.absent) ? "text-[#fc9999] border border-red-500" : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184] "}   py-1.5  rounded font-bold flex justify-around text-sm `}>
-                      <p>{item.day} </p>
-
-
-                      <p className='font-extrabold'>{item.attendence} %</p>
-                      <p>{item.present} / {item.held}</p>
-                      <p className={`${item.attendence >= 75 ? "bg-green-400 " : "bg-red-400 "} text-black font-extrabold text-sm px-2 rounded`}>{item.attendence >= 75 ? item.hoursCanSkip : item.additionalHoursNeeded}</p>
-                    </div>
-                  )
-                  }
-
-                </div>
-              )
-            })
-
-          }
+          {attendanceArray?.map((item, index) => (
+            <SwipeableAttendanceItem
+              key={index}
+              item={item}
+              index={index}
+              onSwipeLeft={handleSwipeLeft}
+              onSwipeRight={handleSwipeRight}
+              onSwipeUndo={handleSwipeUndo}
+              isFirst={index === 0}
+              tempCnt={tempCnt}
+              totalPercentage={totalPercentage}
+              present={data.present}
+              held={data.held}
+              hoursCanSkip={hoursCanSkip}
+              hoursNeeded={hoursNeeded}
+              swipedItems={swipedItems}
+            />
+          ))}
         </div>
       </div>
 
-
-
-
-
       <div className='flex justify-center mt-4 mb-15'>
         <div className='w-105 text-slate-200 bg-black border  border-[#222528]  p-2 rounded'>
-
           <label className=' flex flex-col py-1 px-2'>
             <div className='font-semibold text-sm'>
               Check your friend's attendance
-              {/* <span className='bg-green-500 text-2xs w-fit px-1 rounded-4xl ml-1'>new</span> */}
             </div>
             <span className='text-2xs text-slate-500 font-semibold'>login once, use it forever</span>
-
           </label>
           <div className='flex items-center justify-around gap-1 mt-2'>
             <div className='flex flex-col gap-3'>
-
               <input type="text" placeholder='22L31A05K3' className='w-40 bg-black border   border-[#222528] font-bold rounded px-2 py-1  text-sm text-center focus:outline-none focus:ring-0 focus:border-emerald-500' value={frnd_data.frnd_redgNo} onChange={handleFrndChange} name='frnd_redgNo' />
               <input type="text" placeholder='password' className='w-40 bg-black border  border-[#222528] font-bold rounded px-2 py-1  text-sm text-center focus:outline-none focus:ring-0 focus:border-emerald-500' value={frnd_data.frnd_password} onChange={handleFrndChange} name='frnd_password' />
-
             </div>
             <div className='flex flex-col gap-3'>
               <button disabled={loading} className={`${miniloading ? "animate-pulse opacity-40" : ""} bg-green-400 text-black rounded-lg py-1.5 font-extrabold text-sm`} onClick={fetch_frnd_Attendance}>Fetch</button>
               <input type="text" className='w-20 bg-black border  border-[#222528] font-bold rounded px-2 py-1  text-sm text-center focus:outline-none focus:ring-0 focus:border-emerald-500 text-white' value={frndAttendanceData} readOnly />
             </div>
-
           </div>
           <div className='bg-black border  border-[#222528] p-1.5 rounded mt-3'>
             <div className='text-center text-xs mb-1 font-bold '>Today attendance status</div>
@@ -837,16 +971,9 @@ const Home = () => {
               ))}
             </div>
           </div>
-
         </div>
       </div>
-
-
-
-
-
     </section>
-
   )
 }
 
