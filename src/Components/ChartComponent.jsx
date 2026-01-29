@@ -9,7 +9,7 @@ const ChartComponent = ({ progress, size = 120 }) => {
   const getColor = () => {
     if (progress < 50) return "#EF4444";          // red
     if (progress < 75) return "#F97316";          // orange
-    return "#00ce86";          // green
+    return "#03ff81";          // green
                                 // mint green
   };
 
@@ -21,7 +21,7 @@ const ChartComponent = ({ progress, size = 120 }) => {
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#211f1f"
+          stroke="#3c403c"
           strokeWidth="12"
           fill="none"
         />

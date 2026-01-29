@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Me from '../assets/Me.png'
 const Aboutus = () => {
   const handleBack = () => {
     window.history.back()
@@ -81,7 +81,7 @@ const Aboutus = () => {
               <div className='space-y-4'>
                 <div className='flex items-center gap-4'>
                   <div className='w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-2xl'>
-                    YT
+                    <img src={Me} alt='Tarun' className='rounded-4xl'/>
                   </div>
                   <div>
                     <h3 className='text-xl font-bold text-emerald-400'>Y Tarun Sai Krishna</h3>

@@ -114,7 +114,7 @@ const SwipeableAttendanceItem = ({ item, index, onSwipeLeft, onSwipeRight, onSwi
         </div>
       </div>
 
-      <p className='text-xs text-slate-400 text-center mb-2'>
+      <p className='text-xs text-black bg-white rounded p-0.5 font-bold animate-pulse text-center mb-2'>
         👉 Swipe right for Leave | Swipe left for Holiday 👈
       </p>
 
@@ -719,7 +719,7 @@ const Home = () => {
         </div>
 
         <div className='h-40 rounded-3xl border border-[#222528] shadow shadow-slate-800 py-1 font-extrabold text-sm w-40 flex flex-col items-center justify-center text-[#e6fdff]'>
-          <div className=' rounded-2xl px-1 text-green-400'>Present attendance</div>
+          <div className=' rounded-2xl px-1 text-green-300'>Present attendance</div>
           <div>
             {data.total_percentage
               ? <ChartComponent progress={data.total_percentage} />
