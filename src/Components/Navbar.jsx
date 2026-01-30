@@ -10,30 +10,32 @@ const Navbar = () => {
     const navigate = useNavigate();
     return (
         <div className='bg-black fixed bottom-0 z-50 w-full   flex justify-between items-center  text-slate-200 text-2xs h-15 font-bold'>
-            <button className="border-r border-[#222528] h-full w-full flex flex-col items-center justify-center gap-0.4" onClick={()=> navigate('/home')}>
-                <p className='text-slate-200'>Attendance</p>
+            <button className="h-full w-full flex flex-col items-center justify-center gap-1" onClick={()=> navigate('/home')}>
                 <FaHome  size={20} className='text-[#03ff81]'/>
+                <p className='text-slate-200'>Attendance</p>
             </button>
-            <button className="border-r border-[#222528] h-full w-full flex flex-col items-center justify-center gap-0.4" onClick={() => navigate('/timetable')}>
-                <p className='text-slate-200'>TimeTable</p>
+            <button className="h-full w-full flex flex-col items-center justify-center gap-1" onClick={() => navigate('/timetable')}>
                 <FaTable size={20} className='text-[#03ff81]' />
+                <p className='text-slate-200'>TimeTable</p>
             </button>
-            <button className="border-r border-[#222528] h-full w-full flex flex-col items-center justify-center gap-0.4 " onClick={()=> navigate('/register')}>
-                <p className='text-slate-200'>Register</p>
+            <button className=" h-full w-full flex flex-col items-center justify-center gap-1 " onClick={()=> navigate('/register')}>
                 <FaCloud size={20} className='text-[#03ff81]' />
+                <p className='text-slate-200'>Register</p>
             </button>
-            <button className=" h-full w-full border-r border-[#222528] flex flex-col items-center justify-center gap-0.4" onClick={() => navigate('/subjectwise')}>
-                <p className='text-slate-200 text-nowrap'>Subject wise</p>
-                <ImBooks size={20} className='text-[#03ff81]' />
-            </button>
-            <button className=" h-full w-full border-r border-[#222528] flex flex-col items-center justify-center gap-0.4" onClick={() => navigate('/material')}>
-                <p className='text-slate-200'>Material</p>
+           
+            <button className=" h-full w-full  flex flex-col items-center justify-center gap-1" onClick={() => navigate('/material')}>
                 <IoBookSharp size={20} className='text-[#03ff81]' />
+                <p className='text-slate-200'>Material</p>
             </button>
-            <button className= "h-full w-full flex flex-col items-center justify-center gap-0.4" onClick={() => navigate('/game')}>
-                <p className='text-slate-200'>Game</p>
+             <button className=" h-full w-full  flex flex-col items-center justify-center gap-1" onClick={() => navigate('/subjectwise')}>
+                <ImBooks size={20} className='text-[#03ff81]' />
+                <p className='text-slate-200 text-nowrap'>SubjectWise</p>
+            </button>
+            <button className= "h-full w-full flex flex-col items-center justify-center gap-1" onClick={() => navigate('/game')}>
                 <IoGameController size={20} className='text-[#03ff81]' />
+                <p className='text-slate-200'>Game</p>
             </button>
+            
         </div>
     )
 }

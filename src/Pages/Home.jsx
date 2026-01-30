@@ -114,8 +114,8 @@ const SwipeableAttendanceItem = ({ item, index, onSwipeLeft, onSwipeRight, onSwi
         </div>
       </div>
 
-      <p className='text-xs text-black bg-pink-300 rounded py-1 px-2 font-bold animate-pulse text-center mb-2'>
-        👉 Swipe right for Leave | Swipe left for Holiday 👈
+      <p className='text-xs text-white bg-slate-900 rounded py-1 px-2 font-bold animate-pulse text-center mb-2'>
+        Swipe right for Leave | Swipe left for Holiday
       </p>
 
       <p className='mt-4 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
@@ -817,7 +817,7 @@ const Home = () => {
                   </span>
                 </button>
               </div>
-              <p className='text-2xs font-extrabold bg-yellow-300 w-fit px-1 rounded text-black'>Last updated: {lastUpdated}</p>
+              <p className='text-2xs font-bold  w-fit px-1 rounded text-white'>Last updated: {lastUpdated}</p>
 
               <div className='border border-[#222528] p-1 py-2 rounded-md'>
                 <h1 className='text-center text-sm font-bold  mb-3'>Select period to bunk today</h1>
