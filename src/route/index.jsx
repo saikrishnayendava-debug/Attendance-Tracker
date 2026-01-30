@@ -17,6 +17,7 @@ import Pdfs from "../Components/Pdfs";
 import Form from "../Components/Form";
 import Subject from "../Components/Subject";
 import WaterSortPuzzle from "../Components/WaterSortPuzzle";
+import SearchPage from "../Pages/SearchPage";
 
 
 const router = createBrowserRouter([
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: 'game',
         element: <WaterSortPuzzle/>
+      },
+      {
+        path: 'search',
+        element: <SearchPage/>
       }
     ],
   },

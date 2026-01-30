@@ -8,7 +8,7 @@ const Year = () => {
   const navigate = useNavigate();
   const params = useParams();
   const branch = params.branch;
-  console.log(branch)
+  
   const arr = ["1", "2", "3", "4"];
   return (
     <section className=" bg-black min-h-screen">
