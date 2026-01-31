@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import LoadingSpinner from '../Components/LoadingSpinner';
 const SearchPage = () => {
     const [search, setSearch] = useState();
+    const [previewPdf, setPreviewPdf] = useState(null);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -123,6 +124,53 @@ const SearchPage = () => {
                         </div>
                     )
                 }
+                {previewPdf && (
+                <div
+                    className='fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4'
+                    onClick={closePreview}
+                >
+                    <div
+                        className='bg-[#1a1a1a] rounded-lg w-full max-w-5xl h-[85vh] flex flex-col shadow-2xl'
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className='flex items-center justify-between p-4 border-b border-[#222528] bg-[#0f0f0f]'>
+                            <h3 className='text-slate-200 font-bold text-lg truncate pr-4'>{previewPdf.Title}</h3>
+                            <button
+                                onClick={closePreview}
+                                className='text-slate-200 hover:text-red-500 transition-colors text-2xl font-bold min-w-[30px]'
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* PDF Viewer */}
+                        <div className='flex-1 overflow-hidden bg-gray-800'>
+                            <iframe
+                                src={previewPdf.Url}
+                                className='w-full h-full'
+                                title={previewPdf.Title}
+                            />
+                        </div>
+
+                        {/* Footer with actions */}
+                        <div className='p-4 border-t border-[#222528] bg-[#0f0f0f] flex gap-3 justify-end'>
+                            <button
+                                onClick={closePreview}
+                                className='bg-red-500 text-xs text-white px-4 py-1 rounded hover:bg-gray-600 transition-colors font-bold'
+                            >
+                                Close
+                            </button>
+                            <button
+                                onClick={() => handleDownload(previewPdf)}
+                                className='bg-red-500 text-xs text-white px-4 py-1 rounded hover:bg-green-700 transition-colors font-bold'
+                            >
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
 
             </div>
