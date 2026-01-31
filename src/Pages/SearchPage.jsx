@@ -24,7 +24,7 @@ const SearchPage = () => {
             if (!search) {
                 return;
             }
-            const response = await axios.get(`https://database-9qqy.onrender.com/pdf/?search=${search}`);
+            const response = await axios.get(`https://database-9qqy.onrender.com/pdf/?search=${search}&page=${page}`);
             setData(response.data.data);
             setTotalPages(response.data.data.totalPages);
 
