@@ -87,7 +87,7 @@ const Subject = () => {
                 setShow(true);
                 return;
             }
-            const response = await axios.delete(`https://database-9qqy.onrender.com`, {data: {
+            const response = await axios.delete(`https://database-9qqy.onrender.com/pdf/delete`, {data: {
                 id: editPdfId.id,
                 redgNo,
                 password
