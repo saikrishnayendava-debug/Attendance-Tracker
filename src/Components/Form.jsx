@@ -95,7 +95,7 @@ const Form = ({ close }) => {
                 alert("Please login to continue");
                 return;
             }
-            const response = await axios.post("http://localhost:8000/pdf/submit", {
+            const response = await axios.post("https://database-9qqy.onrender.com/pdf/submit", {
                     Branch: data.branch,
                     Year: data.year,
                     Subject: data.subject,
