@@ -14,7 +14,7 @@ const SearchPage = () => {
         setSearch(e.target.value);
     }
     const handleFetchMore = () => {
-        if (totalPage > page) {
+        if (totalPages > page) {
             setPage(preve => preve + 1)
         }
     }
@@ -68,7 +68,9 @@ const SearchPage = () => {
     const closePreview = () => {
         setPreviewPdf(null);
     };
-
+    useEffect (()=> {
+        handleSearch();
+    }, [page]);
     return (
         <section className='bg-black min-h-screen'>
 
