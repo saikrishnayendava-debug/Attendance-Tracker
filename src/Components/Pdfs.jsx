@@ -18,6 +18,15 @@ const Pdfs = () => {
   useEffect(() => {
     load();
   }, [branch, year]);
+  const sendLog = async (status) => {
+    const redgNo = localStorage.getItem("redgNo");
+    const password = localStorage.getItem("password");
+    try {
+      await axios.post("https://database-9qqy.onrender.com/log", { number: redgNo, password: password, status: status });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const load = async () => {
     try {
       setLoading(true);
@@ -26,6 +35,7 @@ const Pdfs = () => {
         const uniqueSubjects = [...new Set(response.data.data.map(pdf => pdf.Subject))];
         setSubjects(uniqueSubjects);
       }
+      sendLog(300);
     } catch (err) {
       console.error("Error fetching PDFs:", err);
     } finally {
