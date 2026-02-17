@@ -17,13 +17,6 @@ const Table = () => {
     const redgNo = localStorage.getItem("redgNo");
     const password = localStorage.getItem("password");
 
-    const register_api =
-        code === "VIEW"
-            ? `https://women-register-microservice.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-            : server === 2 ? `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}` : `https://viit-main-api.onrender.com/register?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-
-
-
     const fetchServer = async () => {
     try {
       const response = await axios.get("https://database-9qqy.onrender.com/getServer");
@@ -35,21 +28,28 @@ const Table = () => {
     }
   }
     useEffect(() => {
-        fetchServer();
+        
         let interval;
         if (!redgNo || !password) {
             // navigate("/");
             return;
         }
         const fetchTimetable = async () => {
-
-
-
             try {
                 setLoading(true);
                 interval = setInterval(() => {
                     setProgress((p) => (p >= 90 ? 90 : p + 10));
                 }, 200);
+                await fetchServer();
+                const currentServer = localStorage.getItem("server") || 1;
+
+                // URL built same way as Home.jsx's urx — server comparison uses Number()
+                const register_api =
+                    code === "VIEW"
+                        ? `https://women-register-microservice.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
+                        : Number(currentServer) === 2
+                            ? `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
+                            : `https://viit-main-api.onrender.com/register?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`;
                 const registerData = await axios.get(register_api);
                 setData(registerData.data.attendance_table.rows);
                 setHeatmap(registerData.data)
