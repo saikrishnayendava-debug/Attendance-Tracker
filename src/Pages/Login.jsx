@@ -20,12 +20,6 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const searchResults = [
     {
-      title: 'Vercel',
-      url: 'https://attendancetracker-six.vercel.app',
-      heading: 'Attendance Tracker',
-      description: 'Track student attendance instantly. View daily attendance, summaries, and reports with a fast, simple attendance tracking system.'
-    },
-    {
       title: 'attendancetracker.co.in',
       url: 'https://attendancetracker.co.in',
       heading: 'Attendance Tracker',
