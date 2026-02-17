@@ -170,9 +170,7 @@ const Table = () => {
                 }
             </div>
 
-            <div>
-                <AttendanceStreakCalculator response={heatmap} />
-            </div>
+            
 
 
         </section>
