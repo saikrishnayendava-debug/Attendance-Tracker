@@ -20,7 +20,7 @@ const Table = () => {
     const register_api =
         code === "VIEW"
             ? `https://women-register-microservice.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-            : server === 2 ? `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)} : https://viit-main-api.onrender.com/register?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
+            : server === 2 ? `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}` : `https://viit-main-api.onrender.com/register?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
 
 
 
