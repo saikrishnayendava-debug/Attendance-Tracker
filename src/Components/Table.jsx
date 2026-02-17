@@ -12,11 +12,10 @@ const Table = () => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [progress, setProgress] = useState(0);
-    const [server, setServer] = useState(localStorage.getItem("server") || 1);
+    const [heatmap, setHeatmap] = useState()
     const code = localStorage.getItem("code");
     const redgNo = localStorage.getItem("redgNo");
     const password = localStorage.getItem("password");
-
     const fetchServer = async () => {
     try {
       const response = await axios.get("https://database-9qqy.onrender.com/getServer");
@@ -28,7 +27,6 @@ const Table = () => {
     }
   }
     useEffect(() => {
-        
         let interval;
         if (!redgNo || !password) {
             // navigate("/");
@@ -64,7 +62,6 @@ const Table = () => {
                     setLoading(false);
                     setProgress(0);
                 }, 300);
-
             }
         };
 
@@ -170,7 +167,9 @@ const Table = () => {
                 }
             </div>
 
-            
+            <div>
+                <AttendanceStreakCalculator response={heatmap} />
+            </div>
 
 
         </section>
