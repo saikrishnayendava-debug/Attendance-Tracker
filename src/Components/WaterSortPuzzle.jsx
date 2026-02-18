@@ -332,7 +332,7 @@ const WaterSortPuzzle = () => {
             >
               <div
                 className={`w-16 h-56 border-4 rounded-b-3xl bg-slate-600 bg-opacity-40 relative overflow-hidden ${
-                  selectedTube === index ? 'border-blue-500 shadow-lg' : 'border-gray-400'
+                  selectedTube === index ? 'border-blue-500 shadow-lg animate-pulse' : 'border-gray-400'
                 }`}
               >
                 {tube.map((color, colorIndex) => (
