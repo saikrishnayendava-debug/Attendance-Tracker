@@ -331,14 +331,14 @@ const WaterSortPuzzle = () => {
               }`}
             >
               <div
-                className={`w-16 h-56 border-4 rounded-b-3xl bg-white bg-opacity-40 relative overflow-hidden ${
+                className={`w-16 h-56 border-4 rounded-b-3xl bg-slate-600 bg-opacity-40 relative overflow-hidden ${
                   selectedTube === index ? 'border-blue-500 shadow-lg' : 'border-gray-400'
                 }`}
               >
                 {tube.map((color, colorIndex) => (
                   <div
                     key={colorIndex}
-                    className="absolute w-full transition-all duration-300"
+                    className="absolute w-full   transition-all duration-300"
                     style={{
                       height: `${100 / TUBE_CAPACITY}%`,
                       bottom: `${(colorIndex * 100) / TUBE_CAPACITY}%`,
@@ -367,12 +367,7 @@ const WaterSortPuzzle = () => {
           >
             Reset Level
           </button>
-          <button
-            onClick={clearProgress}
-            className="px-3 py-1 bg-[#03ff81] text-black rounded font-extrabold hover:bg-purple-600 transition"
-          >
-            Start from Level 1
-          </button>
+          
         </div>
       </div>
     </div>
