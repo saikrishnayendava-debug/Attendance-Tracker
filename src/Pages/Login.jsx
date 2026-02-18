@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header'
+import AdUnit from '../Components/AdUnit'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 // import ToastNotification, { showToast } from '../Components/ToastNotification';
 import { MdAccountBox } from "react-icons/md"
@@ -184,7 +185,7 @@ const Login = () => {
           <span>Share on WhatsApp</span>
         </button>
       </div>
-
+      <AdUnit/>
       <p className='font-extrabold text-lg mt-8'>Search on Google</p>
       <div className="w-full bg-black text-white rounded-4xl">
         {/* Search Bar */}
