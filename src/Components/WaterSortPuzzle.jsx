@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { RotateCcw, Trophy, Play } from 'lucide-react';
 import Navbar from './Navbar';
-
+import AdUnit4 from './AdUnit4';
 const WaterSortPuzzle = () => {
   const TUBE_CAPACITY = 4;
   const STORAGE_KEY = 'waterSortLevel';
@@ -320,8 +320,8 @@ const WaterSortPuzzle = () => {
             </div>
           </div>
         )}
-
-        <div className="flex flex-wrap justify-center gap-4 mt-30 mb-6">
+        <AdUnit4/>
+        <div className="flex flex-wrap justify-center gap-4 mb-10">
           {tubes.map((tube, index) => (
             <div
               key={index}
@@ -351,7 +351,7 @@ const WaterSortPuzzle = () => {
           ))}
         </div>
 
-        <div className="flex justify-center gap-2 ">
+        <div className="flex justify-center gap-2 mb-5">
           <button
             onClick={undo}
             disabled={history.length === 0}
