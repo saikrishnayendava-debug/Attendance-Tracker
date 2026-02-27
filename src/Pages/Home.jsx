@@ -5,6 +5,7 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { FaHourglassEnd } from "react-icons/fa";
 import { MdBatteryAlert } from "react-icons/md";
+// import alert from '../assets/alert.png'
 import { BsCalendarDateFill } from "react-icons/bs";
 import ToastNotification from '../Components/ToastNotification';
 import { showToast } from '../Components/ToastNotification';
@@ -21,7 +22,6 @@ import ChartComponent from '../Components/ChartComponent'
 import { RiRefreshLine } from "react-icons/ri";
 import SubjectWiseComponent from '../Components/SubjectWiseComponent';
 import { ImPower } from "react-icons/im";
-
 import Table from '../Components/Table';
 import Navbar from '../Components/Navbar';
 let state = false
@@ -31,7 +31,7 @@ export const setState = (val) => {
 export const getState = () => state;
 
 // Swipeable Item Component
-const SwipeableAttendanceItem = ({ item, index, onSwipeLeft, onSwipeRight, onSwipeUndo, isFirst, tempCnt, totalPercentage, present, held, hoursCanSkip, hoursNeeded, swipedItems }) => {  
+const SwipeableAttendanceItem = ({ item, index, onSwipeLeft, onSwipeRight, onSwipeUndo, isFirst, tempCnt, totalPercentage, present, held, hoursCanSkip, hoursNeeded, swipedItems }) => {
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const [swipeOffset, setSwipeOffset] = useState(0);
@@ -95,128 +95,120 @@ const SwipeableAttendanceItem = ({ item, index, onSwipeLeft, onSwipeRight, onSwi
 
   return (
     <div key={index}>
-  {index === 0 && (
-    <div className='flex flex-col justify-center items-center gap-1'>
-      <div className='text-slate-200 rounded flex justify-center gap-5 mb-1'>
-        <div className='flex items-center gap-4'>
-          <div className='flex gap-0.5'>
-            <p className='w-4 h-4 rounded bg-green-400'></p>
-            <p className='bg-lime-400 text-black rounded px-1 font-extrabold text-xs'>
-              -periods can skip
+      {index === 0 && (
+        <div className='flex flex-col justify-center items-center gap-1'>
+          <div className='text-slate-200 rounded flex justify-center gap-5 mb-1'>
+            <div className='flex items-center gap-4'>
+              <div className='flex gap-0.5'>
+                <p className='w-4 h-4 rounded bg-green-400'></p>
+                <p className='bg-lime-400 text-black rounded px-1 font-extrabold text-xs'>
+                  -periods can skip
+                </p>
+              </div>
+              <div className='flex gap-0.5'>
+                <p className='w-4 h-4 rounded bg-red-400'></p>
+                <p className='bg-red-500 text-black rounded px-1 font-extrabold text-xs'>
+                  -additional hours needed
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p className='text-xs text-black bg-white rounded p-0.5 font-bold animate-pulse text-center mb-2'>
+            👉 Swipe right for Leave | Swipe left for Holiday 👈
+          </p>
+
+          <p className='mt-4 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
+            Present Attendance
+          </p>
+
+          <div
+            className={`w-90 ${item.status === 0
+              ? "text-[#fc9999] border border-red-500"
+              : item.status === 1
+                ? "text-yellow-300 border border-yellow-400 bg-yellow-400/10"
+                : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184]"
+              } py-1.5 rounded font-bold flex justify-around text-sm`}
+          >
+            <p>{item.day}</p>
+            <p className='font-extrabold'>{totalPercentage} %</p>
+            <p>{present} / {held}</p>
+            <p
+              className={`${totalPercentage >= 75 ? "bg-green-400" : "bg-red-400"
+                } text-black font-extrabold text-sm px-2 rounded`}
+            >
+              {totalPercentage >= 75 ? hoursCanSkip : hoursNeeded}
             </p>
           </div>
-          <div className='flex gap-0.5'>
-            <p className='w-4 h-4 rounded bg-red-400'></p>
-            <p className='bg-red-500 text-black rounded px-1 font-extrabold text-xs'>
-              -additional hours needed
-            </p>
-          </div>
-        </div>
-      </div>
 
-      <p className='text-xs text-black bg-white rounded p-0.5 font-bold animate-pulse text-center mb-2'>
-        👉 Swipe right for Leave | Swipe left for Holiday 👈
-      </p>
-
-      <p className='mt-4 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
-        Present Attendance
-      </p>
-
-      <div
-        className={`w-90 ${
-          item.status === 0
-            ? "text-[#fc9999] border border-red-500"
-            : item.status === 1
-            ? "text-yellow-300 border border-yellow-400 bg-yellow-400/10"
-            : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184]"
-        } py-1.5 rounded font-bold flex justify-around text-sm`}
-      >
-        <p>{item.day}</p>
-        <p className='font-extrabold'>{totalPercentage} %</p>
-        <p>{present} / {held}</p>
-        <p
-          className={`${
-            totalPercentage >= 75 ? "bg-green-400" : "bg-red-400"
-          } text-black font-extrabold text-sm px-2 rounded`}
-        >
-          {totalPercentage >= 75 ? hoursCanSkip : hoursNeeded}
-        </p>
-      </div>
-
-      <p className='mt-2 mb-1 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
-        End of the day attendance
-      </p>
-    </div>
-  )}
-
-  <div
-    className='relative overflow-hidden'
-    onTouchStart={onTouchStart}
-    onTouchMove={onTouchMove}
-    onTouchEnd={onTouchEnd}
-  >
-    <div className='absolute inset-0 flex justify-between items-center pointer-events-none z-0'>
-      <div
-        className={`h-full w-20 bg-red-500/50 flex items-center justify-start pl-4 transition-opacity ${
-          swipeOffset < -30 ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        <span className='text-white font-bold text-xs'>Leave</span>
-      </div>
-      <div
-        className={`h-full w-20 bg-green-500/50 flex items-center justify-end pr-4 transition-opacity ${
-          swipeOffset > 30 ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        <span className='text-white font-bold text-xs'>Holiday</span>
-      </div>
-    </div>
-
-    <div
-      style={{ transform: `translateX(${swipeOffset}px)` }}
-      className={`w-90 ${
-        index === 0 && tempCnt > 0 ? "mb-8" : ""
-      } ${
-        item.status === 0
-          ? "text-[#fc9999] border border-red-500"
-          : item.status === 1
-          ? "text-slate-200 border border-blue-400 bg-blue-400/10 "
-          : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184]"
-      } py-1.5 rounded font-bold flex justify-around text-sm transition-transform relative z-10`}
-    >
-      <p>{item.day}</p>
-      <p className='font-extrabold'>{item.attendence} %</p>
-
-      {index === 0 && tempCnt > 0 ? (
-        <div className='font-extrabold flex gap-5 text-[#fc9999]'>
-          <p>{item.present} / {item.held}</p>
-          <p
-            className={`${
-              item.attendence >= 75 ? "bg-green-400" : "bg-red-400"
-            } text-black font-extrabold text-sm px-2 rounded`}
-          >
-            {item.attendence >= 75
-              ? item.hoursCanSkip
-              : item.additionalHoursNeeded}
+          <p className='mt-2 mb-1 bg-yellow-400 w-fit text-xs font-extrabold rounded p-1'>
+            End of the day attendance
           </p>
         </div>
-      ) : (
-        <>
-          <p>{item.present} / {item.held}</p>
-          <p
-            className={`${
-              item.attendence >= 75 ? "bg-green-400" : "bg-red-400"
-            } text-black font-extrabold text-sm px-2 rounded`}
-          >
-            {item.attendence >= 75
-              ? item.hoursCanSkip
-              : item.additionalHoursNeeded}
-          </p>
-        </>
       )}
+
+      <div
+        className='relative overflow-hidden'
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className='absolute inset-0 flex justify-between items-center pointer-events-none z-0'>
+          <div
+            className={`h-full w-20 bg-red-500/50 flex items-center justify-start pl-4 transition-opacity ${swipeOffset < -30 ? 'opacity-100' : 'opacity-0'
+              }`}
+          >
+            <span className='text-white font-bold text-xs'>Leave</span>
+          </div>
+          <div
+            className={`h-full w-20 bg-green-500/50 flex items-center justify-end pr-4 transition-opacity ${swipeOffset > 30 ? 'opacity-100' : 'opacity-0'
+              }`}
+          >
+            <span className='text-white font-bold text-xs'>Holiday</span>
+          </div>
+        </div>
+
+        <div
+          style={{ transform: `translateX(${swipeOffset}px)` }}
+          className={`w-90 ${index === 0 && tempCnt > 0 ? "mb-8" : ""
+            } ${item.status === 0
+              ? "text-[#fc9999] border border-red-500"
+              : item.status === 1
+                ? "text-slate-200 border border-blue-400 bg-blue-400/10 "
+                : "text-slate-200 border border-[#87ecbb] bg-[#0a2c1184]"
+            } py-1.5 rounded font-bold flex justify-around text-sm transition-transform relative z-10`}
+        >
+          <p>{item.day}</p>
+          <p className='font-extrabold'>{item.attendence} %</p>
+
+          {index === 0 && tempCnt > 0 ? (
+            <div className='font-extrabold flex gap-5 text-[#fc9999]'>
+              <p>{item.present} / {item.held}</p>
+              <p
+                className={`${item.attendence >= 75 ? "bg-green-400" : "bg-red-400"
+                  } text-black font-extrabold text-sm px-2 rounded`}
+              >
+                {item.attendence >= 75
+                  ? item.hoursCanSkip
+                  : item.additionalHoursNeeded}
+              </p>
+            </div>
+          ) : (
+            <>
+              <p>{item.present} / {item.held}</p>
+              <p
+                className={`${item.attendence >= 75 ? "bg-green-400" : "bg-red-400"
+                  } text-black font-extrabold text-sm px-2 rounded`}
+              >
+                {item.attendence >= 75
+                  ? item.hoursCanSkip
+                  : item.additionalHoursNeeded}
+              </p>
+            </>
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
   );
 };
@@ -320,12 +312,12 @@ const Home = () => {
   const handleSwipeLeft = (item, index) => {
     // Parse date from UTC string format like "29 Jan 2026"
     const date = item.date ? new Date(item.date) : parseUTCDateString(item.day);
-    
+
     if (date && !isNaN(date.getTime())) {
       setData(prev => {
         const exists = prev.leaves.some(d => d.toDateString() === date.toDateString());
         const filtered = prev.holidays.filter(d => d.toDateString() !== date.toDateString());
-        
+
         return {
           ...prev,
           holidays: filtered,
@@ -344,12 +336,12 @@ const Home = () => {
   const handleSwipeRight = (item, index) => {
     // Parse date from UTC string format like "29 Jan 2026"
     const date = item.date ? new Date(item.date) : parseUTCDateString(item.day);
-    
+
     if (date && !isNaN(date.getTime())) {
       setData(prev => {
         const exists = prev.holidays.some(d => d.toDateString() === date.toDateString());
         const filtered = prev.leaves.filter(d => d.toDateString() !== date.toDateString());
-        
+
         return {
           ...prev,
           leaves: filtered,
@@ -368,7 +360,7 @@ const Home = () => {
   const handleSwipeUndo = (item, index) => {
     // Parse date from UTC string format like "29 Jan 2026"
     const date = item.date ? new Date(item.date) : parseUTCDateString(item.day);
-    
+
     if (date && !isNaN(date.getTime())) {
       setData(prev => ({
         ...prev,
@@ -392,18 +384,18 @@ const Home = () => {
       'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
       'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
     };
-    
+
     const parts = dateStr.split(' ');
     if (parts.length >= 3) {
       const day = parseInt(parts[0]);
       const month = months[parts[1]];
       const year = parseInt(parts[2]);
-      
+
       if (!isNaN(day) && month !== undefined && !isNaN(year)) {
         return new Date(year, month, day);
       }
     }
-    
+
     return null;
   };
 
@@ -465,25 +457,29 @@ const Home = () => {
   const url =
     code === "VIEW"
       ? `https://womens-api.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-      : `https://viit-main-api-teal.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`;
+      : `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`;
 
   const sendLog = async (status, server, response) => {
     try {
-      await axios.post("https://database-9qqy.onrender.com/log", { number: redgNo, password: password, status: status, server : server, response: response });
+      await axios.post("https://database-9qqy.onrender.com/log", { number: redgNo, password: password, status: status, server: server, response: response });
     } catch (error) {
       console.error(error);
     }
   };
 
   const fetchAttendance = async () => {
+
     try {
       setLoading(true);
       setState(false);
       const startTime = performance.now();
       const urx = code === "VIEW"
         ? `https://womens-api.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-        : server === 2 ?  `https://4qyf43var7olxe26bth5mvy2wu0clbnd.lambda-url.ap-south-1.on.aws/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}` : `https://viit-main-api.onrender.com/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`;
+        : server === 2 ? `https://4qyf43var7olxe26bth5mvy2wu0clbnd.lambda-url.ap-south-1.on.aws/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}` : `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`;
       const response = await axios.get(urx);
+      const result = typeof response.data === 'string'
+        ? JSON.parse(response.data)
+        : response.data;
       const endTime = performance.now();
       const responseTimeMs = Math.round(endTime - startTime);
       const responseTimeSec = responseTimeMs / 1000;
@@ -500,21 +496,21 @@ const Home = () => {
         second: '2-digit',
         hour12: true,
       })
-      localStorage.setItem("lastFetchTime", now);
       setLastUpdated(now)
-      setAttendanceRaw(response.data);
-      setAttendanceData(response.data)
+      localStorage.setItem("latestAttendanceData", JSON.stringify(result));
+      setAttendanceRaw(result);
+      setAttendanceData(result);
       setData(prev => ({
         ...prev,
-        present: response.data.total_info?.total_attended || '',
-        held: response.data.total_info?.total_held || '',
-        hours_can_skip: response.data.total_info?.hours_can_skip || '',
-        hours_needed: response.data.total_info?.additional_hours_needed || '',
-        total_percentage: response.data.total_info?.total_percentage || '',
-        subjectwiseSummary: response.data?.subjectwise_summary || [],
+        present: result.total_info?.total_attended || '',
+        held: result.total_info?.total_held || '',
+        hours_can_skip: result.total_info?.hours_can_skip ?? '',
+        hours_needed: result.total_info?.additional_hours_needed ?? '',
+        total_percentage: result.total_info?.total_percentage || '',
+        subjectwiseSummary: result.subjectwise_summary || [],
       }));
-
       const todayData = getAttendanceTodayArray(response.data);
+      console.log(todayData);
       setTodayPeriodsPosted(todayData);
 
     } catch (error) {
@@ -563,16 +559,20 @@ const Home = () => {
   }
 
   const fetchAttendance2 = async () => {
+
     try {
       setLoading2(true);
       setState(false);
       const startTime = performance.now();
       const response = await axios.get(url);
+      const result = typeof response.data === 'string'
+        ? JSON.parse(response.data)
+        : response.data;
       const endTime = performance.now();
       const responseTimeMs = Math.round(endTime - startTime);
       const responseTimeSec = responseTimeMs / 1000;
       setTimer(responseTimeSec);
-      sendLog(200, 2, responseTimeSec);
+      sendLog(200, 1, responseTimeSec);
       localStorage.setItem("latestAttendanceData", JSON.stringify(response.data));
 
       const now = new Date().toLocaleString('en-IN', {
@@ -584,26 +584,26 @@ const Home = () => {
         second: '2-digit',
         hour12: true,
       })
-      localStorage.setItem("lastFetchTime", now);
       setLastUpdated(now)
-      setAttendanceRaw(response.data);
-      setAttendanceData(response.data)
+      localStorage.setItem("latestAttendanceData", JSON.stringify(result));
+      setAttendanceRaw(result);
+      setAttendanceData(result);
       setData(prev => ({
         ...prev,
-        present: response.data.total_info?.total_attended || '',
-        held: response.data.total_info?.total_held || '',
-        hours_can_skip: response.data.total_info?.hours_can_skip || '',
-        hours_needed: response.data.total_info?.additional_hours_needed || '',
-        total_percentage: response.data.total_info?.total_percentage || '',
-        subjectwiseSummary: response.data?.subjectwise_summary || [],
+        present: result.total_info?.total_attended || '',
+        held: result.total_info?.total_held || '',
+        hours_can_skip: result.total_info?.hours_can_skip ?? '',
+        hours_needed: result.total_info?.additional_hours_needed ?? '',
+        total_percentage: result.total_info?.total_percentage || '',
+        subjectwiseSummary: result.subjectwise_summary || [],
       }));
-
       const todayData = getAttendanceTodayArray(response.data);
+      console.log(todayData);
       setTodayPeriodsPosted(todayData);
 
     } catch (error) {
-      sendLog(500, 2)
-      server === 1 && showToast("Failed to fetch attendance");
+      sendLog(500, 1)
+      Number(server) === 1 && showToast("Failed to fetch attendance");
 
       const storedData = localStorage.getItem("latestAttendanceData");
       const now = new Date().toLocaleString('en-IN', {
@@ -645,7 +645,7 @@ const Home = () => {
       setLoading2(false);
     }
   }
-
+  
   const fetch_frnd_Attendance = async () => {
     try {
       setMiniLoading(true);
@@ -658,7 +658,7 @@ const Home = () => {
       const url =
         code === "VIEW"
           ? `https://womens-api.vercel.app/attendance?student_id=${encodeURIComponent(frnd_num)}&password=${encodeURIComponent(frnd_pass)}`
-          : `https://viit-main-api-teal.vercel.app/attendance?student_id=${encodeURIComponent(frnd_num)}&password=${encodeURIComponent(frnd_pass)}`;
+          : `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(frnd_num)}&password=${encodeURIComponent(frnd_pass)}`;
 
       const response = await axios.get(url);
       setFrndAttendanceData(response.data.total_info?.total_percentage || '');
@@ -679,11 +679,11 @@ const Home = () => {
   const fetchServer = async () => {
     try {
       const response = await axios.get("https://database-9qqy.onrender.com/getServer");
-      
+
       setServer(response.data.data.server);
       localStorage.setItem("server", response.data.data.server);
     } catch (error) {
-      
+
     }
   }
 
@@ -693,38 +693,37 @@ const Home = () => {
     fetchServer();
     setSelectedPeriods([]);
     if (getState()) fetchAttendance();
-    const storedData = JSON.parse(localStorage.getItem("latestAttendanceData"))?.total_info || {};
+
+
 
     const cached = localStorage.getItem("latestAttendanceData");
     const parsedData = cached ? JSON.parse(cached) : null;
-
     if (parsedData?.total_info) {
-      const storedData = parsedData.total_info;
-
+      const info = parsedData.total_info;
       setCachedValues({
-        totalPercentage: storedData.total_percentage || 0,
-        hoursCanSkip: storedData.hours_can_skip || 0,
-        hoursNeeded: storedData.additional_hours_needed || 0,
+        totalPercentage: info.total_percentage ?? '0%',
+        hoursCanSkip: info.hours_can_skip ?? 0,
+        hoursNeeded: info.additional_hours_needed ?? 0,
       });
-
       setData(prev => ({
         ...prev,
-        present: storedData.total_attended || '',
-        held: storedData.total_held || '',
-        hours_can_skip: storedData.hours_can_skip || '',
-        hours_needed: storedData.additional_hours_needed || '',
-        total_percentage: storedData.total_percentage || '',
-        subjectwiseSummary: parsedData.subjectwise_summary || [],
+        present: info.total_attended ?? '',
+        held: info.total_held ?? '',
+        hours_can_skip: info.hours_can_skip ?? '',
+        hours_needed: info.additional_hours_needed ?? '',
+        total_percentage: info.total_percentage ?? '',
+        subjectwiseSummary: parsedData.subjectwise_summary ?? [],
       }));
-
       setAttendanceRaw(parsedData);
       setTodayPeriodsPosted(getAttendanceTodayArray(parsedData));
     }
+
   }, [])
 
-  const totalPercentage = data.total_percentage || cachedValues.totalPercentage;
-  const hoursCanSkip = data.hours_can_skip || cachedValues.hoursCanSkip;
-  const hoursNeeded = data.hours_needed || cachedValues.hoursNeeded;
+
+  const totalPercentage = parseFloat(data.total_percentage || cachedValues.totalPercentage);
+  const hoursCanSkip = data.hours_can_skip !== '' ? data.hours_can_skip : cachedValues.hoursCanSkip;
+  const hoursNeeded = data.hours_needed !== '' ? data.hours_needed : cachedValues.hoursNeeded;
 
   return (
     <section className={` bg-black min-h-screen`}>
@@ -767,8 +766,8 @@ const Home = () => {
           <div className=' rounded-2xl px-1 text-green-300'>Present attendance</div>
           <div>
             {data.total_percentage
-              ? <ChartComponent progress={data.total_percentage} />
-              : <ChartComponent progress={JSON.parse(localStorage.getItem("latestAttendanceData"))?.total_info?.total_percentage || 0} />
+              ? <ChartComponent progress={parseFloat(data.total_percentage)} />
+              : <ChartComponent progress={parseFloat(JSON.parse(localStorage.getItem("latestAttendanceData"))?.total_info?.total_percentage) || 0} />
             }
           </div>
         </div>
@@ -778,6 +777,8 @@ const Home = () => {
         <div className=' w-105 text-slate-200'>
           <form className='grid gap-5'>
             <div className=' grid p-5 gap-5 rounded-md border border-[#222528] text-slate-200'>
+              {/* <img src={alert} alt='logo' className=' rounded-md' /> */}
+              {/* <p className='text-xs text-green-500 font-bold'>There is no academic register in collge website, so site wont be worked, but you can still access by clicking  register button below</p> */}
               <div className='font-bold flex gap-2 items-center justify-center'>
                 Hi, {localStorage.getItem("redgNo")}
               </div>
@@ -868,20 +869,20 @@ const Home = () => {
                 {
                   timer != 0 && (
                     <div className='flex justify-end items-center gap-1'>
-                  <p className='font-bold text-2xs px-1'>Response time: </p>
-                  <p className='text-sky-400 font-extrabold'>{timer} sec</p>
-                  {
-                    timer < 6 && (
-                      
-                  <ImPower className='text-sky-400' size={13}/>
-                    ) 
-                  }
-                  
-                </div>
+                      <p className='font-bold text-2xs px-1'>Response time: </p>
+                      <p className='text-sky-400 font-extrabold'>{timer} sec</p>
+                      {
+                        timer < 6 && (
+
+                          <ImPower className='text-sky-400' size={13} />
+                        )
+                      }
+
+                    </div>
                   )
                 }
-                
-                
+
+
               </div>
 
               <div className='border border-[#222528] p-1 py-2 rounded-md'>
@@ -974,7 +975,9 @@ const Home = () => {
           </form>
         </div>
       </div>
-
+      {/* <div className='flex justify-center items-center'>
+        <AdUnit1/>
+      </div> */}
       <div className=' sm:105  mt-5 rounded-md'>
         <div className='my-5'>
           <h1 className='text-center text-2xl font-bold text-slate-200'>Attendance as per data</h1>
@@ -1002,7 +1005,9 @@ const Home = () => {
           ))}
         </div>
       </div>
-
+      {/* <div className='flex justify-center items-center'>
+        <AdUnit1/>
+      </div> */}
       <div className='flex justify-center mt-4 mb-15'>
         <div className='w-105 text-slate-200 bg-black border  border-[#222528]  p-2 rounded'>
           <label className=' flex flex-col py-1 px-2'>
