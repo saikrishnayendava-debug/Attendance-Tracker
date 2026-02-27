@@ -10,9 +10,9 @@ const Header = () => {
     localStorage.clear();
     navigate('/')
   }
-  const presentlocation = location.pathname.split('/')[1];
 
   return (
+    <>
     <section className='h-15 border-b border-[#222528] w-full  flex items-center justify-between bg-black px-2'>
       <Link to='/' className='flex items-center lg:justify-center lg:gap-2 bg-gradient-to-r  py-2  '>
         <div>
@@ -22,14 +22,14 @@ const Header = () => {
           <img src={logo} alt="logo" className='rounded-lg' />
         </div>
         <div className='font-bold text-sm lg:text-2xl rounded px-2 '>
-          <span className='text-[#00ce86] '>Attendance</span>
+          <span className='text-[#00ce86]'>Attendance</span>
           <span className='text-slate-300'>Tracker</span>
         </div>
       </Link>
       <>
         {
           (location.pathname != '/') && (
-            <button type='button' onClick={handleClick} className='cursor-pointer  bg-green-400 text-black px-2 font-extrabold text-sm rounded-lg py-1.5  flex gap-1 items-center justify-center'>
+            <button type='button' onClick={handleClick} className='cursor-pointer  bg-green-400 px-2 font-extrabold text-sm rounded-lg py-1.5  flex gap-1 items-center justify-center'>
               Logout
               <MdAccountCircle size={20} color='black'/>
             </button>
@@ -37,6 +37,8 @@ const Header = () => {
         }
       </>
     </section>
+      
+    </>
   )
 }
 
