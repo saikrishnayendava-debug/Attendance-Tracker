@@ -134,7 +134,7 @@ const Login = () => {
                 value={data.password}
               />
             </div>
-            
+
             <button className='bg-[#03ff81] text-black cursor-pointer rounded py-1.5 font-bold text-sm'>
               Submit
             </button>
@@ -142,16 +142,24 @@ const Login = () => {
           </form>
         </div>
       </div>
+
+      <div className='border border-[#222528] bg-[#0a0a0a] rounded-2xl w-85 p-5 animate-pulse mb-3'>
+        <a href="/atapk.apk" class="flex justify-center items-center gap-1">
+          <img alt="logo" class="w-8 h-8 rounded-md" src="/src/assets/logo.png" />
+          <p class="font-bold text-red-500 text-lg">Download APK</p>
+        </a>
+      </div>
+
       <div className='border border-[#222528] bg-[#0a0a0a] rounded-2xl w-85 p-5 animate-pulse'>
-          
-            <div className='flex justify-center items-center gap-1'>
-              <img src={logo} alt='logo' className='w-8 h-8 rounded-md' />
-              <p className='font-bold text-pink-500  text-lg'>Attendance Tracker (VIEW)</p>
-            </div>
-            
-            <div className='font-bold text-center text-sm'>Only for women's campus</div>
-          <Link to={'https://attendance-tracker-womens.vercel.app/'} className='font-bold text-xs text-sky-500'>https://attendance-tracker-womens.vercel.app</Link>
+
+        <div className='flex justify-center items-center gap-1'>
+          <img src={logo} alt='logo' className='w-8 h-8 rounded-md' />
+          <p className='font-bold text-pink-500  text-lg'>Attendance Tracker (VIEW)</p>
         </div>
+
+        <div className='font-bold text-center text-sm'>Only for women's campus</div>
+        <Link to={'https://attendance-tracker-womens.vercel.app/'} className='font-bold text-xs text-sky-500'>https://attendance-tracker-womens.vercel.app</Link>
+      </div>
       {/* WhatsApp Share Section */}
       <div className='flex flex-col items-center gap-2 my-4'>
         <p className='font-extrabold'>Share to your friends</p>
@@ -244,10 +252,10 @@ const Login = () => {
         </div>
       </div>
 
-     
 
 
-      
+
+
     </section>
   )
 }
