@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
-import ax from '../assets/ax.png'
 import Header from '../Components/Header'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
@@ -11,16 +10,12 @@ import attendenceCalculator from '../utils/main'
 import { attendencePerform, getSundays } from '../utils/utils'
 import { useNavigate } from 'react-router-dom'
 import getAttendanceCounts from '../utils/helper'
-import FooterComponent from '../Components/FooterComponent'
-import getAttendanceTotals from '../utils/getAttendanceTotals'
-import attendanceTarget from '../utils/AttendanceTarget'
 import { getAttendanceTodayArray } from '../utils/attendanceTodayArray'
 import ChartComponent from '../Components/ChartComponent'
 import { RiRefreshLine } from "react-icons/ri"
-import SubjectWiseComponent from '../Components/SubjectWiseComponent'
 import { ImPower } from "react-icons/im"
 import Navbar from '../Components/Navbar'
-import Bye from '../Components/Bye'
+
 
 let state = false
 export const setState = (val) => { state = val }
