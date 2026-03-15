@@ -29,7 +29,7 @@ const Navbar = () => {
             </button>
              <button className=" h-full w-full  flex flex-col items-center justify-center gap-1" onClick={() => navigate('/subjectwise')}>
                 <ImBooks size={20} className='text-[#03ff81]' />
-                <p className='text-slate-200 text-nowrap'>SubjectWise</p>
+                <p className='text-slate-200 text-nowrap'>Fees & Marks</p>
             </button>
             <button className= "h-full w-full flex flex-col items-center justify-center gap-1" onClick={() => navigate('/game')}>
                 <IoGameController size={20} className='text-[#03ff81]' />
