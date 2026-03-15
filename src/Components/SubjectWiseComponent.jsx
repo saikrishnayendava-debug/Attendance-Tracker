@@ -168,13 +168,14 @@ const SubjectWiseComponent = () => {
                     )}
                   </div>
                 )}
+                
               </div>
             )}
 
             {/* ── PERFORMANCE (PAST) ── */}
             {performancePast && (
               <div>
-                <h2 className='text-xl font-bold text-center mb-4'>Performance (Past)</h2>
+                <h2 className='text-xl font-bold text-center mb-4'>Academic Marks</h2>
 
                 <div className='border border-[#222528] rounded-lg p-4 mb-6 flex flex-wrap gap-4 text-xs font-bold justify-center'>
                   <span className='text-slate-400'>CGPA: <span className='text-emerald-400 text-lg'>{performancePast.cgpa}</span></span>
