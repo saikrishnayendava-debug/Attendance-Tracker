@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
+import ax from '../assets/ax.png'
 import Header from '../Components/Header'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-import { FaHourglassEnd } from "react-icons/fa"
-import { MdBatteryAlert } from "react-icons/md"
 import { BsCalendarDateFill } from "react-icons/bs"
 import ToastNotification from '../Components/ToastNotification'
 import { showToast } from '../Components/ToastNotification'
@@ -14,15 +13,14 @@ import { useNavigate } from 'react-router-dom'
 import getAttendanceCounts from '../utils/helper'
 import FooterComponent from '../Components/FooterComponent'
 import getAttendanceTotals from '../utils/getAttendanceTotals'
-import { PiStudentFill } from "react-icons/pi"
 import attendanceTarget from '../utils/AttendanceTarget'
 import { getAttendanceTodayArray } from '../utils/attendanceTodayArray'
 import ChartComponent from '../Components/ChartComponent'
 import { RiRefreshLine } from "react-icons/ri"
 import SubjectWiseComponent from '../Components/SubjectWiseComponent'
 import { ImPower } from "react-icons/im"
-import Table from '../Components/Table'
 import Navbar from '../Components/Navbar'
+import Bye from '../Components/Bye'
 
 let state = false
 export const setState = (val) => { state = val }
@@ -248,7 +246,7 @@ const Home = () => {
   const [frndPeriods, setFrndPeriods] = useState(null)
   const [swipedItems, setSwipedItems] = useState({})
   const [timer, setTimer] = useState(0)
-  const [server, setServer] = useState(localStorage.getItem("server") || 1)
+  const [server, setServer] = useState(localStorage.getItem("server") || 2)
 
   const handleTempClick = (index) => {
     setSelectedPeriods(prev => {
@@ -385,9 +383,7 @@ const Home = () => {
   const redgNo = localStorage.getItem("redgNo")
   const password = localStorage.getItem("password")
   const code = localStorage.getItem("code")
-  const url = code === "VIEW"
-    ? `https://womens-api.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-    : `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
+  const url = `https://viit-main-api.onrender.com/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
 
   const sendLog = async (status, server, response) => {
     try {
@@ -408,11 +404,7 @@ const Home = () => {
       setLoading(true)
       setState(false)
       const startTime = performance.now()
-      const urx = code === "VIEW"
-        ? `https://womens-api.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-        : server === 2
-          ? `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
-          : `https://temporary-api-i3cp.onrender.com/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
+      const urx = `https://register-api-green.vercel.app/attendance?student_id=${encodeURIComponent(redgNo)}&password=${encodeURIComponent(password)}`
       const response = await axios.get(urx)
       const result = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
       const endTime = performance.now()
@@ -481,7 +473,7 @@ const Home = () => {
       const endTime = performance.now()
       const responseTimeSec = Math.round(endTime - startTime) / 1000
       setTimer(responseTimeSec)
-      sendLog(200, 1, responseTimeSec)
+      sendLog(200, 2, responseTimeSec)
 
       const now = new Date().toLocaleString('en-IN', {
         day: '2-digit', month: '2-digit', year: 'numeric',
