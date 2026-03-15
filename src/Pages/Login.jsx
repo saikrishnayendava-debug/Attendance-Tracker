@@ -145,7 +145,7 @@ const Login = () => {
 
       <div className='border border-[#222528] bg-[#0a0a0a] rounded-2xl w-85 p-5 animate-pulse mb-3'>
         <a href="/atapk.apk" class="flex justify-center items-center gap-1">
-          <img alt="logo" class="w-8 h-8 rounded-md" src="/src/assets/logo.png" />
+         
           <p class="font-bold text-red-500 text-lg">Download APK</p>
         </a>
       </div>
