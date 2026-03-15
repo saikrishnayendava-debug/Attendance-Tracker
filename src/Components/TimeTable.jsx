@@ -3,7 +3,6 @@ import { FaRegFaceSadCry } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
-
 const TimeTable = () => {
   const navigate = useNavigate();
 
@@ -18,15 +17,9 @@ const TimeTable = () => {
   const redgNo = localStorage.getItem("redgNo");
   const password = localStorage.getItem("password");
 
-  const timetable_api =
-
-    code === "VIEW"
-      ? `https://women-timetable-microservice.onrender.com/attendance?student_id=${encodeURIComponent(
+  const timetable_api = `https://viit-main-api.onrender.com/timetable?student_id=${encodeURIComponent(
         redgNo
-      )}&password=${encodeURIComponent(password)}`
-      : `https://viit-main-api.onrender.com/timetable?student_id=${encodeURIComponent(
-        redgNo
-      )}&password=${encodeURIComponent(password)}`;  /*saikrishna */
+      )}&password=${encodeURIComponent(password)}`;
 
   useEffect(() => {
     if (!redgNo || !password) {
